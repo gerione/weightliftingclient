@@ -1,16 +1,22 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
 import Scoreboard from '@/components/Scoreboard'
+import Root from '@/components/Root'
 import Current from '@/components/Current'
+import CreateCompetition from '@/components/CreateCompetition'
+Vue.use(VueRouter)
 
-Vue.use(Router)
-
-export default new Router({
+export default new VueRouter({
   routes: [
+    {
+      name: 'scoreboard',
+      path: '/scoreboard/:id', 
+      component: Scoreboard
+    },
     {
       path: '/',
       name: 'home',
-      component: Scoreboard
+      component: Root
     },
     {
       path: '/current',
@@ -18,9 +24,12 @@ export default new Router({
       component: Current
     },
     {
-      name: 'scoreboard',
-      path: '/scoreboard/:id', 
-      component: Scoreboard
-    }
+      name: 'createcompetition',
+      path: '/createcompetition', 
+      component: CreateCompetition
+    },
+   
+    
+
   ]
 })

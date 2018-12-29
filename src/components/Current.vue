@@ -1,10 +1,10 @@
 <template>
- <v-container fluid grid-list-xs>
+ <v-container grid-list-xs>
      
     <v-layout v-bind="binding" >
       <v-flex d-flex xs4 >
         <v-card  dark>
-          <v-card-title>
+          <v-card-title class="pb-0 pt-1">
             <div>
             <span class="headline">Gerald Kettlgruber</span>
             <br> 
@@ -12,7 +12,7 @@
 
             </div>
           </v-card-title>
-          <v-card-text>
+          <v-card-text class="py-1">
           <div>Total: 90kg</div>
         <div>Punkte: 90kg</div>
 
@@ -24,14 +24,14 @@
       
             <v-flex d-flex xs4 >
         <v-card dark>
-          <v-card-title>
+          <v-card-title  class="pb-0  pt-1">
             <div>
             <span class="headline">Reissen</span>
             <br />
             <span>Best: 90kg</span>
             </div>
           </v-card-title>
-          <v-card-text>
+          <v-card-text class="py-1">
              <v-chip class="font-weight-black">
                <v-avatar>
                  <v-icon color="green">check</v-icon>
@@ -57,14 +57,14 @@
       
       <v-flex d-flex xs4 >
         <v-card  dark>
-          <v-card-title>
+          <v-card-title  class="pb-0  pt-1">
             <div>
               <span class="headline">Stossen</span>
             <br /><br />
             <span> </span>
             </div>
           </v-card-title>
-          <v-card-text>
+          <v-card-text class="py-1"> 
              <v-chip class="font-weight-black"> 
                <v-avatar>
                  <v-icon color="green">check</v-icon>

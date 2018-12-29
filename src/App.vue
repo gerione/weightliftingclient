@@ -25,7 +25,9 @@
         </v-list-tile>
          <v-subheader class="mt-3 grey--text text--darken-1">Live</v-subheader>
 
-          <v-list>
+          
+      </v-list>
+      <v-list>
           <v-list-tile v-for="item in competitions" :key="item.text" avatar 
             :to="item.id"
           >
@@ -36,7 +38,6 @@
             
           </v-list-tile>
         </v-list>
-      </v-list>
     </v-navigation-drawer>
     <v-toolbar
       app
@@ -77,23 +78,16 @@ export default {
         {
           icon: "account_box",
           title: "Current",
-          path: "current"
-        },
-        {
-          icon: "list",
-          title: "Ergebnisse"
+          path: "/current"
         },
         {
           icon: "add",
-          title: "Erstellen"
+          title: "Erstellen",
+          path: "/createcompetition"
         }
       ],
       competitions: [
-        { picture: 28, name: "NL: SKV II - VSD1", id: "/scoreboard/1" },
-        { picture: 38, name: "NL: SKV II - VSD2", id: "/scoreboard/2" },
-        { picture: 48, name: "NL: SKV II - VSD3", id: "/scoreboard/3" },
-        { picture: 58, name: "NL: SKV II - VSD4", id: "/scoreboard/4" },
-        { picture: 78, name: "NL: SKV II - VSD5", id: "/scoreboard/5" }
+        { picture: 28, name: "NL: SKV II - VSD1", id: "/scoreboard/1" }
       ],
       miniVariant: false,
       title: "Austrian weightlifting livescores"
