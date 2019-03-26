@@ -9,6 +9,8 @@
       fixed
       app
     >
+    <!-- 
+      
       <v-list>
         <v-list-tile
           value="true"
@@ -26,7 +28,7 @@
          <v-subheader class="mt-3 grey--text text--darken-1">Live</v-subheader>
 
           
-      </v-list>
+      </v-list>-->
       <v-list>
           <v-list-tile v-for="item in competitions" :key="item.text" avatar 
             :to="item.id"
@@ -79,18 +81,13 @@ export default {
           icon: "account_box",
           title: "Current",
           path: "/current"
-        },
-        {
-          icon: "add",
-          title: "Erstellen",
-          path: "/createcompetition"
         }
       ],
       competitions: [
         { picture: 28, name: "NL: SKV II - VSD1", id: "/scoreboard/1" }
       ],
       miniVariant: false,
-      title: "Austrian weightlifting livescores"
+      title: "SK VÖEST Gewichtheben - LIVE"
     };
   },
   name: "App",

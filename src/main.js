@@ -69,6 +69,10 @@ Vue.component('scoreboardtable', {
     //instantiate Tabulator when element is mounted
     this.tabulator = new Tabulator(this.$refs.table, {
       data: this.tableData, //link data to table
+      resizableRows: false,
+      movableRows: false,
+      resizableColumns: false,
+      movableColumns: false,
       ajaxURL:  this.source + "api/competitions/" + this.competitionid + "/lifters/flat/", //ajax URL
       ajaxConfig:"POST", //ajax HTTP request type
       ajaxLoader: false,
@@ -125,7 +129,7 @@ Vue.mixin({
   data: function() {
     return {
       get source() {
-        return "http://127.0.0.1:5000/";
+        return "https://weightliftingoverlay.herokuapp.com/";
       }
     }
   }

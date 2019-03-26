@@ -31,33 +31,27 @@ export default {
     competitions: [
       {
         id: 1,
-        location: "Adf222",
-        name: "Test2333222",
-        start_time: "Fri, 28 Dec 2018 14:05:00 GMT",
-        youtube_id: "ffasdf"
-      },
-      {
-        id: 2,
-        location: "Adf222",
-        name: "Test2333222",
-        start_time: "Fri, 28 Dec 2018 14:05:00 GMT",
-        youtube_id: "ffasdf"
-      },
-      {
-        id: 3,
         location: "Auwiesen",
-        name: "SKV - XYZ",
-        start_time: "Mon, 31 Dec 2018 13:05:00 GMT",
-        youtube_id: "wwMDvPCGeE0"
-      },
-      {
-        id: 4,
-        location: "Auwiesen",
-        name: "SKV 2 - TEST",
-        start_time: "Sun, 30 Dec 2018 13:10:00 GMT",
-        youtube_id: "RnXqOe1IFr4"
+        name: "Wettkampf 1",
+        start_time: "Fri, 28 Dec 2018 14:05:00 GMT",
+        youtube_id: "1234"
       }
     ]
-  })
+  }), 
+  
+  mounted: function() {
+    this.loadData();
+  },
+
+  methods: {
+    loadData: function() {
+      var api = this.source + "api/competitions/";
+      this.axios.get(api).then(response => {
+        this.competitions= response.data;
+        
+      });
+      setTimeout(this.loadData, 15000);
+    }
+  }
 };
 </script>
