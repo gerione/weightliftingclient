@@ -28,9 +28,15 @@
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
 
-    <v-stepper-step step="4" editable>Youtube ID</v-stepper-step>
+    <v-stepper-step  :complete="e6 > 4" step="4" editable>Youtube ID</v-stepper-step>
     <v-stepper-content step="4">
       <v-text-field v-model="competition.youtube_url" label="Youtube ID"></v-text-field>
+      <v-btn color="primary" @click="e6 = 5">Continue</v-btn>
+      <v-btn flat>Cancel</v-btn>
+    </v-stepper-content>
+    <v-stepper-step  step="5" editable>Type</v-stepper-step>
+    <v-stepper-content step="5">
+      <v-text-field v-model="competition.competition_type" label="Type"></v-text-field>
       <v-btn color="primary" @click="submit">Create</v-btn>
       <v-btn flat>Cancel</v-btn>
     </v-stepper-content>
@@ -47,7 +53,8 @@ export default {
         venue: null,
         date: new Date().toISOString().substr(0, 10),
         time: null,
-        youtube_url: null
+        youtube_url: null,
+        competition_type: null
       }
     };
   },
@@ -58,8 +65,10 @@ export default {
         name: this.competition.name,
         location: this.competition.venue,
         start_time: this.competition.date + "T" + this.competition.time,
-        youtube_url: this.competition.youtube_url
+        youtube_url: this.competition.youtube_url,
+        type: this.competition.competition_type
       };
+       console.log(json);
       this.axios
         .post(api, json)
         .then(function(response) {

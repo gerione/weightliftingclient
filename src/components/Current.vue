@@ -7,7 +7,7 @@
             <div>
               <span class="headline">{{name}}</span>
               <br>
-              <span>{{team}}</span>
+              <span>Verein: {{team}} | Sinclair: {{sf}}</span> 
             </div>
           </v-card-title>
           <v-card-text class="py-1">
@@ -98,11 +98,19 @@ export default {
     }, 
     snatch () {
       var data = this.lifts.slice(0,3).filter(lift => lift.result === 2).map(lift => parseInt(lift.weight));
-      return Math.max.apply(Math, data);
+      var max = 0;
+      if (Math.max.apply(Math, data) > max){
+        return Math.max.apply(Math, data);
+      }
+      return max;
     },
     cj () {
       var data = this.lifts.slice(3,6).filter(lift => lift.result === 2).map(lift => lift.weight);
-      return Math.max.apply(Math, data);
+      var max = 0;
+      if (Math.max.apply(Math, data) > max){
+        return Math.max.apply(Math, data);
+      }
+      return max;
     }, 
     total () {
       return this.snatch + this.cj
