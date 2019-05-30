@@ -1,11 +1,7 @@
 <template>
-  <v-tabs v-model="active" fixed-tabs>
-    <v-tab key:1>Tabelle</v-tab>
-    <v-tab key:2>Stream</v-tab>
-    <v-tabs-items touchless>
-    <v-tab-item key:1>
+
       <v-layout row wrap grid-list-md text-xs-center>
-        <v-flex xs12>Willkommen bei Wettkampf {{ competitionid }}</v-flex>
+        <v-flex xs12 class="display-2">{{ competition.name }}</v-flex>
         <Current :competitionid="competitionid" />
         <TeamStandings v-if="type === 'team'"  :competitionid="competitionid" />
         <v-flex d-flex xs12>
@@ -19,19 +15,6 @@
         </v-flex>
         -->
       </v-layout>
-    </v-tab-item>
-    <v-tab-item key:2>
-      <v-layout row wrap grid-list-md text-xs-center>
-        <v-flex xs12>Willkommen bei Wettkampf {{ competitionid }}</v-flex>
-       
-        <v-flex xs12>
-          <youtube :video-id="videoId" ref="youtube" :player-vars="playerVars" height="400"></youtube>
-        </v-flex>
-
-      </v-layout>
-    </v-tab-item>
-     </v-tabs-items>
-  </v-tabs>
 </template>
 
 <script>
@@ -45,13 +28,8 @@ export default {
   props: ["competitionid"],
   data() {
     return {
-      active: "Tabelle",
-      videoId: "21X5lGlDOfg",
-      playerVars: {
-        autoplay: 1,
-        
-      },
-      type:null
+      type:null,
+      competition: {name:"default"},
     };
   },
   components: {
@@ -64,8 +42,6 @@ export default {
       // react to route changes...
       // here i can ask the api for updates
       this.loadCompInfo();
-
-     
     }
   },
   mounted: function() {
@@ -76,15 +52,11 @@ export default {
       var api = this.source + "api/competitions/" + this.competitionid + "/";
      
       this.axios.get(api).then(response => {
+        this.competition = response.data.competition;
         this.videoId = response.data.competition.youtube_id;
         this.type = response.data.competition.type;
          console.log("route changed" + this.type);
       });
-    }
-  }, 
-  computed: {
-    player() {
-      return this.$refs.youtube.player;
     }
   }
 };

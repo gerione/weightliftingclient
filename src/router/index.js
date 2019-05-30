@@ -5,8 +5,9 @@ import Root from '@/components/Root'
 import Current from '@/components/Current'
 import TeamStandings from '@/components/TeamStandings'
 import Scoreboard from '@/components/Scoreboard'
-import CreateCompetition from '@/components/CreateCompetition'
+import Admin from '@/components/Admin'
 import ScoreboardTable from '@/components/ScoreboardTable'
+import Weight from '@/components/Weight'
 
 Vue.use(VueRouter)
 
@@ -24,8 +25,8 @@ export default new VueRouter({
       component: Root
     },
     {
-      name: 'test',
-      path: '/test/:competitionid/:type',
+      name: 'Scoreboard',
+      path: '/scoreboard/:competitionid/:type',
       props: true,
       meta: { layout: "overlay" },
       component: ScoreboardTable
@@ -45,16 +46,15 @@ export default new VueRouter({
       component: TeamStandings
     },
     {
-      name: 'scoreboard',
-      path: '/scoreboard/:competitionid',
-      meta: { layout: "overlay" },
+      name: 'weight',
+      path: '/weight/:competitionid',
       props: true,
-      component: Scoreboard
+      component: Weight
     },
     {
       name: 'admin',
       path: '/admin', 
-      component: CreateCompetition
+      component: Admin
     },
   ]
 })

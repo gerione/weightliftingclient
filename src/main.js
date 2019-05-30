@@ -31,6 +31,7 @@ Vue.mixin({
     return {
       get source() {
         return "https://weightliftingoverlay.herokuapp.com/";
+        //return "http://localhost:5000/";
       }
     }
   }

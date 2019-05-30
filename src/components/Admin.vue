@@ -1,0 +1,193 @@
+<template>
+  <div>
+    <v-toolbar flat color="white">
+      <v-toolbar-title>My CRUD</v-toolbar-title>
+      <v-divider class="mx-2" inset vertical></v-divider>
+      <v-spacer></v-spacer>
+      <v-dialog v-model="dialog" max-width="500px">
+        <template v-slot:activator="{ on }">
+          <v-btn color="primary" dark class="mb-2" v-on="on">Neuer Wettkampf</v-btn>
+        </template>
+        <v-card>
+          <v-card-title>
+            <span class="headline">{{ formTitle}}</span>
+          </v-card-title>
+
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12 sm12 md12>
+                  <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editedItem.location" label="Ort"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editedItem.start_time" label="Datum"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editedItem.youtube_id" label="Youtube ID"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editedItem.type" label="type"></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+            <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-toolbar>
+    <v-data-table :headers="headers" :items="competitions" class="elevation-1">
+      <template v-slot:items="props">
+        <td>{{ props.item.name }}</td>
+        <td class="text-xs-center">{{ props.item.location }}</td>
+        <td class="text-xs-center">{{ props.item.start_time }}</td>
+        <td class="text-xs-center">{{ props.item.youtube_id }}</td>
+        <td class="text-xs-center">{{ props.item.type }}</td>
+        <td class="justify-center layout px-0">
+          <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
+          <v-icon small @click="deleteItem(props.item)">delete</v-icon>
+        </td>
+      </template>
+      <template v-slot:no-data>
+        <v-btn color="primary" @click="initialize">Reset</v-btn>
+      </template>
+    </v-data-table>
+  </div>
+</template>
+
+<script>
+export default {
+  data: () => ({
+    dialog: false,
+    headers: [
+      {
+        text: "Name",
+        align: "left",
+        sortable: false,
+        value: "name"
+      },
+      { text: "Ort", align: "center", value: "location" },
+      { text: "Start time", value: "start_time" },
+      { text: "Youtube ID", value: "youtube_id" },
+      { text: "Typ", value: "type" },
+      { text: "Actions", value: "name", sortable: false }
+    ],
+    competitions: [],
+    editedIndex: -1,
+    editedItem: {
+        id: -1,
+        name: "",
+        location: "",
+        start_time: "",
+        youtube_id: "",
+        type: ""
+    },
+    defaultItem: {
+        id: -1,
+        name: "",
+        location: "",
+        start_time: "",
+        youtube_id: "",
+        type: ""
+    }
+  }),
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    }
+  },
+  watch: {
+    dialog(val) {
+      val || this.close();
+    }
+  },
+  created() {
+    this.loadData();
+  },
+  methods: {
+    loadData() {
+      var api = this.source + "api/competitions/";
+      this.axios
+        .get(api)
+        .then(response => {
+          console.log(response);
+          this.competitions = response.data;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    initialize() {
+      this.loadData();
+    },
+    editItem(item) {
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+    deleteItem(item) {
+      var api = this.source + "api/competitions/" + item.id + "/";
+      var confirmed_result = confirm(
+        "Are you sure you want to delete ".concat(item.name, "?")
+      );
+      if (confirmed_result) {
+        this.axios
+          .delete(api)
+          .then(response => {
+            this.loadData();
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+    },
+    close() {
+      this.dialog = false;
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+      }, 300);
+    },
+    save() {
+      var json = {
+        name: this.editedItem.name,
+        location: this.editedItem.location,
+        start_time: this.editedItem.start_time,
+        youtube_url: this.editedItem.youtube_url,
+        type: this.editedItem.type
+      };
+      
+      var api = this.source + "api/competitions/";
+      if (this.editedItem.id != -1){
+          console.log("PUT")
+          api = this.source + "api/competitions/" +this.editedItem.id + "/";
+          this.axios
+        .put(api, json)
+         .then(response => {
+            this.loadData();
+          })
+        .catch(function(error) {
+          console.log(error);
+        });
+      }
+      else {
+          console.log("POST")
+          this.axios
+        .post(api, json)
+         .then(response => {
+            this.loadData();
+          })
+        .catch(function(error) {
+          console.log(error);
+        });
+      }
+      this.close();
+    }
+  }
+};
+</script>

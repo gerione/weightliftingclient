@@ -1,67 +1,111 @@
 <template>
   <v-container grid-list-xs>
     <v-layout v-bind="binding">
-      <v-flex d-flex xs4>
+      <v-flex d-flex xs12>
         <v-card dark>
           <v-card-title class="pb-0 pt-1">
             <div>
-              <span class="headline">{{name}}</span>
-              <br>
-              <span>Verein: {{team}} | Sinclair: {{sf}}</span> 
+              <span class="headline">{{lifter.name}}</span>
+              <br />
+              <span v-if="1 === 1">Verein: {{lifter.masterdata.club_single_short}} &nbsp; | &nbsp;  Sinclair: {{lifter.sf}}</span>
             </div>
           </v-card-title>
-          <v-card-text class="py-1">
-            <div>Total: {{total}}kg</div>
-            <div>Punkte: {{points}}</div>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-
-      <v-flex d-flex xs4>
-        <v-card dark>
-          <v-card-title class="pb-0 pt-1">
-            <div>
-              <span class="headline">Reissen</span>
-              <br>
-              <span>Best: {{snatch}}kg</span>
-            </div>
-          </v-card-title>
-          <v-card-text class="py-1">
-            <template v-for="item in lifts.slice(0, 3)">
-              <v-chip class="font-weight-black">
-                <v-avatar>
-                  <v-icon v-if="item.result === 2" color="green">check</v-icon>
-                  <v-icon v-else-if="item.result === 1" color="red">clear</v-icon>
-                  <v-icon v-else-if="item.result === 0">timer</v-icon>
-                </v-avatar>
-                {{item.weight}}
-              </v-chip>
+          <v-card-text>
+            <template v-for="lift in lifter.lifts.slice(0, 3)">
+              <td class="text-xs-center" width="80">
+                <v-sheet
+                  label
+                  v-if="lift.result === 2"
+                  :width="50"
+                  color="green"
+                  text-color="white"
+                  class="font-weight-black subheading"
+                >{{lift.weight}}</v-sheet>
+                <v-sheet
+                  label
+                  v-else-if="lift.result === 1"
+                  :width="50"
+                  color="red"
+                  text-color="white"
+                  class="font-weight-black subheading"
+                >{{lift.weight}}</v-sheet>
+                <v-sheet
+                  label
+                  v-else-if="lift.result === 0"
+                  :width="50"
+                  color="black"
+                  text-color="white"
+                  class="font-weight-black subheading"
+                >{{lift.weight}}</v-sheet>
+              </td>
             </template>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-
-      <v-flex d-flex xs4>
-        <v-card dark>
-          <v-card-title class="pb-0 pt-1">
-            <div>
-              <span class="headline">Stossen</span>
-              <br>
-              <br>
-              <span></span>
-            </div>
-          </v-card-title>
-          <v-card-text class="py-1">
-            <template v-for="item in lifts.slice(3, 6)">
-              <v-chip class="font-weight-black">
-                <v-avatar>
-                  <v-icon v-if="item.result === 2" color="green">check</v-icon>
-                  <v-icon v-else-if="item.result === 1" color="red">clear</v-icon>
-                  <v-icon v-else-if="item.result === 0">timer</v-icon>
-                </v-avatar>
-                {{item.weight}}
-              </v-chip>
+            <td class="text-xs-center" width="80">
+              <v-sheet
+                label
+                :width="80"
+                color="grey"
+                text-color="white"
+                class="font-weight-black subheading"
+              >{{snatch * this.lifter.sf | round }}</v-sheet>
+            </td>
+            <td width="60"/>
+            <template v-for="lift in lifter.lifts.slice(3, 6)">
+              <td class="text-xs-center" width="80">
+                <v-sheet
+                  label
+                  v-if="lift.result === 2"
+                  :width="50"
+                  color="green"
+                  text-color="white"
+                  class="font-weight-black subheading"
+                >{{lift.weight}}</v-sheet>
+                <v-sheet
+                  label
+                  v-else-if="lift.result === 1"
+                  :width="50"
+                  color="red"
+                  text-color="white"
+                  class="font-weight-black subheading"
+                >{{lift.weight}}</v-sheet>
+                <v-sheet
+                  label
+                  v-else-if="lift.result === 0"
+                  :width="50"
+                  color="black"
+                  text-color="white"
+                  class="font-weight-black subheading"
+                >{{lift.weight}}</v-sheet>
+              </td>
             </template>
+
+            <td class="text-xs-center" width="80">
+              <v-sheet
+                label
+                :width="80"
+                color="grey"
+                text-color="white"
+                class="font-weight-black subheading"
+              >{{cj * this.lifter.sf | round }}</v-sheet>
+            </td>
+            <td width="60"/>
+            <td class="text-xs-center" width="80">
+              <v-sheet
+                label
+                :width="50"
+                color="grey"
+                text-color="white"
+                class="font-weight-black subheading"
+              >{{total}}</v-sheet>
+            </td>
+            <td class="text-xs-center" width="80">
+              <v-sheet
+                label
+                :width="80"
+                color="grey"
+                text-color="white"
+                class="font-weight-black subheading"
+              >{{points | round}}</v-sheet>
+            </td>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -71,23 +115,73 @@
 
 <script>
 export default {
-   data() {
+  data() {
     return {
-      name: "Gerald Kettlgruber",
-      team: "SKV",
-      sf: 1.12,
-      sex: "M",
-      lifts: [
-        { weight: 10, result: 0 },
-        { weight: 11, result: 1 },
-        { weight: 12, result: 2 },
-        { weight: 13, result: 0 },
-        { weight: 14, result: 1 },
-        { weight: 15, result: 2 }
-      ]
+      lifter: {
+        id: 12,
+        lifter_id: 4945,
+        lifts: [
+          {
+            attempt: 1,
+            id: 193,
+            result: 0,
+            weight: 1.0
+          },
+          {
+            attempt: 2,
+            id: 194,
+            result: 0,
+            weight: 0.0
+          },
+          {
+            attempt: 3,
+            id: 195,
+            result: 0,
+            weight: 0.0
+          },
+          {
+            attempt: 4,
+            id: 196,
+            result: 0,
+            weight: 0.0
+          },
+          {
+            attempt: 5,
+            id: 197,
+            result: 0,
+            weight: 0.0
+          },
+          {
+            attempt: 6,
+            id: 198,
+            result: 0,
+            weight: 0.0
+          }
+        ],
+        name: " ",
+        sex: true,
+        sf: 1.0000,
+        team: {
+          id: 1,
+          name: "default",
+          short: ""
+        },
+        weightclass: {
+          id: 4,
+          max_weight: 59.0,
+          min_weight: 55.0,
+          name: "W-59",
+          sex: true
+        }
+      }
     };
   },
   props: ["competitionid"],
+  filters: {
+    round: function(value) {
+      return value.toFixed(2);
+    }
+  },
   computed: {
     binding() {
       const binding = {};
@@ -95,28 +189,34 @@ export default {
       if (this.$vuetify.breakpoint.mdAndUp) binding.column = false;
 
       return binding;
-    }, 
-    snatch () {
-      var data = this.lifts.slice(0,3).filter(lift => lift.result === 2).map(lift => parseInt(lift.weight));
+    },
+    snatch() {
+      var data = this.lifter.lifts
+        .slice(0, 3)
+        .filter(lift => lift.result === 2)
+        .map(lift => parseInt(lift.weight));
       var max = 0;
-      if (Math.max.apply(Math, data) > max){
+      if (Math.max.apply(Math, data) > max) {
         return Math.max.apply(Math, data);
       }
       return max;
     },
-    cj () {
-      var data = this.lifts.slice(3,6).filter(lift => lift.result === 2).map(lift => lift.weight);
+    cj() {
+      var data = this.lifter.lifts
+        .slice(3, 6)
+        .filter(lift => lift.result === 2)
+        .map(lift => lift.weight);
       var max = 0;
-      if (Math.max.apply(Math, data) > max){
+      if (Math.max.apply(Math, data) > max) {
         return Math.max.apply(Math, data);
       }
       return max;
-    }, 
-    total () {
-      return this.snatch + this.cj
-    }, 
-    points () {
-      return (this.total * this.sf).toFixed(2);
+    },
+    total() {
+      return this.snatch + this.cj;
+    },
+    points() {
+      return this.total * this.lifter.sf;
     }
   },
   mounted: function() {
@@ -125,16 +225,14 @@ export default {
   methods: {
     loadData: function() {
       var api =
-        this.source + "api/competitions/" + this.competitionid + "/lifters/current/";
+        this.source +
+        "api/competitions/" +
+        this.competitionid +
+        "/lifters/current/";
       this.axios
         .get(api)
         .then(response => {
-          console.log(response);
-          this.name = response.data.name;
-          this.sf = response.data.sf;
-          this.sex = response.data.sex;
-          this.team = response.data.team.short;
-          this.lifts = response.data.lifts;
+          this.lifter = response.data;
         })
         .catch(function(error) {
           console.log(error);

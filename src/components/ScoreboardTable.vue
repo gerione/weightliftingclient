@@ -15,6 +15,8 @@
                 hide-actions
                 class="elevation-1"
                 dark
+                must-sort
+
               >
                 <template v-slot:no-data>
                   <v-alert
@@ -35,7 +37,8 @@
                 </template>
                 <template v-slot:items="props">
                   <td class="subheading">{{ props.item.name }}</td>
-                  <td class="text-xs-center subheading">{{ props.item.team.short }}</td>
+                  <td v-if="type === 'single'" class="text-xs-center subheading">{{ props.item.masterdata.club_single_short }}</td>
+                  <td v-else class="text-xs-center subheading">{{ props.item.team.short }}</td>
                   <td class="text-xs-center subheading">{{ props.item.weightclass.name }}</td>
                   <td class="text-xs-center subheading">{{ props.item.sf }}</td>
                   <template v-for="lifts in props.item.lifts.slice(0,3)">
@@ -244,7 +247,7 @@ export default {
         
       console.log(this.type);
       if (this.type === "single") {
-        return this.lodash.groupBy(this.lifters, "weightclass.name");
+        return {"Wettkampf": this.lodash.sortBy(this.lifters, "weightclass.id")};
       } else {
         return this.lodash.groupBy(this.lifters, "team.short");
       }
@@ -252,7 +255,8 @@ export default {
   },
   data: () => ({
     pagination: {
-      rowsPerPage: -1
+      rowsPerPage: -1, 
+      sortBy: "weightclass.id"
     },
     selected: [],
     headers: [
@@ -264,7 +268,7 @@ export default {
         width: 250
       },
       { text: "Team", value: "team.short", span: 1, width: 30 },
-      { text: "Klasse", value: "weightclass.name", span: 1, width: 50 },
+      { text: "Klasse", value: "weightclass.name", span: 1, width: 50, sortable: true },
       { text: "SF", value: "sf", span: 1, width: 50 },
       { text: "Reißen", value: "lifts.weight", span: 4, width: 80 },
       { text: "Stoßen", value: "lifts.weight", span: 4, width: 80 },
@@ -284,7 +288,6 @@ export default {
       this.axios
         .get(api)
         .then(response => {
-          console.log(response);
           this.lifters = response.data;
         })
         .catch(function(error) {
@@ -295,7 +298,6 @@ export default {
       this.axios
         .get(api)
         .then(response => {
-          console.log(response);
           this.teams = response.data;
         })
         .catch(function(error) {

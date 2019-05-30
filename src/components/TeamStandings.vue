@@ -75,7 +75,6 @@ export default {
       this.axios
         .get(api)
         .then(response => {
-          console.log(response);
           this.teams = response.data;
         })
         .catch(function(error) {
