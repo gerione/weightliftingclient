@@ -62,58 +62,52 @@
   </div>
 </template>
 
-<script>
-export default {
-  data: () => ({
-    dialog: false,
-    headers: [
-      {
-        text: "Name",
-        align: "left",
-        sortable: false,
-        value: "name"
-      },
-      { text: "Ort", align: "center", value: "location" },
-      { text: "Start time", value: "start_time" },
-      { text: "Youtube ID", value: "youtube_id" },
-      { text: "Typ", value: "type" },
-      { text: "Actions", value: "name", sortable: false }
-    ],
-    competitions: [],
-    editedIndex: -1,
-    editedItem: {
-        id: -1,
-        name: "",
-        location: "",
-        start_time: "",
-        youtube_id: "",
-        type: ""
-    },
-    defaultItem: {
-        id: -1,
-        name: "",
-        location: "",
-        start_time: "",
-        youtube_id: "",
-        type: ""
-    }
-  }),
-  computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    }
-  },
-  watch: {
-    dialog(val) {
-      val || this.close();
-    }
-  },
-  created() {
+<script lang="ts">
+import  Vue from "vue";
+import {Component, Prop, Watch} from 'vue-property-decorator';
+import {Header} from  '@/interfaces/Header'
+import {Competition} from  '@/interfaces/Competition'
+import {source} from  '@/mixin.ts'
+
+
+@Component()
+export default class Admin extends Vue  {
+  editedItem: Competition;
+  defaultItem: Competition;
+  editedIndex: number = -1;
+  dialog: boolean = false;
+  competitions: Competition[];
+  headers: Header [];
+
+  constructor(){
+    super();
+    this.editedItem = {id: -1, name: "", location: "", start_time: "", youtube_id: "", type: "" };
+    this.defaultItem = {id: -1, name: "", location: "", start_time: "", youtube_id: "", type: "" };
+    this.competitions = [];
+    this.headers = [];
+    this.headers.push({text: "Name",align: "left",sortable: true,value: "name"});
+    this.headers.push({ text: "Ort", align: "center",sortable: true, value: "location" });
+    this.headers.push({ text: "Start time",sortable: true, value: "start_time" });
+    this.headers.push({ text: "Youtube ID",sortable: true, value: "youtube_id" });
+    this.headers.push({ text: "Typ",sortable: true, value: "type" });
+    this.headers.push({ text: "Actions", value: "name", sortable: false });
+  }
+
+  get formTitle() {
+    return this.editedIndex === -1 ? "New Item" : "Edit Item";
+  }
+
+  @Watch('dialog')
+  onPropertyChanged(value: string, oldValue: string) {
+    return value || this.close();
+  }
+
+   created() {
     this.loadData();
-  },
-  methods: {
-    loadData() {
-      var api = this.source + "api/competitions/";
+  }
+  
+  loadData() {
+      var api = source.source() + "api/competitions/";
       this.axios
         .get(api)
         .then(response => {
@@ -123,16 +117,16 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
-    },
-    initialize() {
+    }
+  initialize() {
       this.loadData();
-    },
-    editItem(item) {
+    }
+        editItem(item) {
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
-    },
+    }
     deleteItem(item) {
-      var api = this.source + "api/competitions/" + item.id + "/";
+      var api = source.source() + "api/competitions/" + item.id + "/";
       var confirmed_result = confirm(
         "Are you sure you want to delete ".concat(item.name, "?")
       );
@@ -146,26 +140,26 @@ export default {
             console.log(error);
           });
       }
-    },
+    }
     close() {
       this.dialog = false;
       setTimeout(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
       }, 300);
-    },
+    }
     save() {
       var json = {
         name: this.editedItem.name,
         location: this.editedItem.location,
         start_time: this.editedItem.start_time,
-        youtube_url: this.editedItem.youtube_url,
+        youtube_id: this.editedItem.youtube_id,
         type: this.editedItem.type
       };
       
-      var api = this.source + "api/competitions/";
+      var api = source.source() + "api/competitions/";
       if (this.editedItem.id != -1){
           console.log("PUT")
-          api = this.source + "api/competitions/" +this.editedItem.id + "/";
+          api = source.source() + "api/competitions/" +this.editedItem.id + "/";
           this.axios
         .put(api, json)
          .then(response => {
@@ -188,6 +182,5 @@ export default {
       }
       this.close();
     }
-  }
 };
 </script>

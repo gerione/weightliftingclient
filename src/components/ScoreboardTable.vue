@@ -6,7 +6,6 @@
           <v-flex xs12>
             <v-card>
               <v-data-table
-                v-model="selected"
                 :headers="headers"
                 :items="liftersa"
                 :pagination.sync="pagination"
@@ -149,7 +148,7 @@
                         text-color="white"
                         :width="70"
                         class="font-weight-black subheading"
-                      >0</v-sheet>
+                      >{{points(key, "snatch_additional_points") | round}}</v-sheet>
                     </td>
                     <td :colspan="3">
                       <strong></strong>
@@ -161,7 +160,7 @@
                         text-color="white"
                         :width="70"
                         class="font-weight-black subheading"
-                      >0</v-sheet>
+                      >{{points(key, "cj_additional_points")  | round}}</v-sheet>
                     </td>
                     <td :colspan="1">
                       <strong></strong>
@@ -173,7 +172,7 @@
                         text-color="white"
                         :width="70"
                         class="font-weight-black subheading"
-                      >0</v-sheet>
+                      >{{(points(key, "snatch_additional_points") + points(key, "cj_additional_points") ) | round}}</v-sheet>
                     </td>
                   </tr>
                   <tr>
@@ -187,7 +186,7 @@
                         text-color="white"
                         :width="70"
                         class="font-weight-black subheading"
-                      >{{snatch_points(key) | round}}</v-sheet>
+                      >{{points(key, "snatch") | round}}</v-sheet>
                     </td>
                     <td :colspan="3">
                       <strong></strong>
@@ -199,7 +198,7 @@
                         text-color="white"
                         :width="70"
                         class="font-weight-black subheading"
-                      >{{cj_points(key) | round}}</v-sheet>
+                      >{{points(key, "cj") | round}}</v-sheet>
                     </td>
                     <td :colspan="1">
                       <strong></strong>
@@ -211,7 +210,7 @@
                         text-color="white"
                         :width="70"
                         class="font-weight-black subheading"
-                      >{{total_points(key) | round}}</v-sheet>
+                      >{{points(key, "total") | round}}</v-sheet>
                     </td>
                   </tr>
                 </template>
@@ -231,60 +230,70 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: ["competitionid", "type"],
-  filters: {
-    round: function(value) {
-      return value.toFixed(2);
-    }
-  },
-  computed: {
-    groups: function() {
+<script lang="ts">
+import  Vue from "vue";
+import {Component, Prop} from 'vue-property-decorator';
+import {Team} from  '@/interfaces/Team'
+import {Header} from  '@/interfaces/Header'
+
+export interface Lifter {
+    name:string;
+}
+  
+
+export interface Pagination{
+    rowsPerPage: number;
+    sortBy: string;
+}
+
+@Component({
+  filters: { round(value:number) { 
+    if (value == null)
+      return 0;
+    return value.toFixed(2); } },
+})
+
+export default class ScoreboardTable extends Vue {
+  @Prop() competitionid: number;
+  @Prop() type: string;
+
+  teams: Team[];
+  lifters: Lifter[];
+  headers: Header [];
+  pagination: Pagination;
+  constructor(){
+    super();
+    this.teams = [];
+    this.lifters = [];
+    this.headers = [];
+    this.headers.push({ text: "Name", align: "left", value: "name", span: 1, width: 250 , sortable: false});
+    this.headers.push({ text: "Team", value: "team.short", span: 1, width: 30 , sortable: false});
+    this.headers.push({ text: "Klasse", value: "weightclass.name", span: 1, width: 50, sortable: true });
+    this.headers.push({ text: "SF", value: "sf", span: 1, width: 50 , sortable: false});
+    this.headers.push({ text: "Reißen", value: "lifts.weight", span: 4, width: 80, sortable: false });
+    this.headers.push({ text: "Stoßen", value: "lifts.weight", span: 4, width: 80 , sortable: false});
+    this.headers.push({ text: "Zweikampf", value: "lifts.weight", span: 4, width: 30, sortable: false });
+    this.pagination = {rowsPerPage: -1, sortBy: "weightclass.id",};
+  }
+
+  get groups() {
       if (this.lifters == null){
         return null;
       }
         
-      console.log(this.type);
       if (this.type === "single") {
         return {"Wettkampf": this.lodash.sortBy(this.lifters, "weightclass.id")};
       } else {
         return this.lodash.groupBy(this.lifters, "team.short");
       }
-    }
-  },
-  data: () => ({
-    pagination: {
-      rowsPerPage: -1, 
-      sortBy: "weightclass.id"
-    },
-    selected: [],
-    headers: [
-      {
-        text: "Name",
-        align: "left",
-        value: "name",
-        span: 1,
-        width: 250
-      },
-      { text: "Team", value: "team.short", span: 1, width: 30 },
-      { text: "Klasse", value: "weightclass.name", span: 1, width: 50, sortable: true },
-      { text: "SF", value: "sf", span: 1, width: 50 },
-      { text: "Reißen", value: "lifts.weight", span: 4, width: 80 },
-      { text: "Stoßen", value: "lifts.weight", span: 4, width: 80 },
-      { text: "Zweikampf", value: "lifts.weight", span: 4, width: 30 }
-    ],
-    lifters: null,
-    teams:null,
+  }
 
-  }),
-  mounted: function() {
+  mounted() {
     this.loadData();
-  },
-  methods: {
-    loadData: function() {
-      var api =
-        this.source + "api/competitions/" + this.competitionid + "/lifters/";
+  }
+
+  loadData() {
+      var api = this.source + "api/competitions/" + this.competitionid + "/lifters/";
       this.axios
         .get(api)
         .then(response => {
@@ -293,8 +302,7 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
-      var api =
-        this.source + "api/competitions/" + this.competitionid + "/teams/";
+      var api = this.source + "api/competitions/" + this.competitionid + "/teams/";
       this.axios
         .get(api)
         .then(response => {
@@ -304,8 +312,9 @@ export default {
           console.log(error);
         });
       setTimeout(this.loadData, 5000);
-    },
-    long_name(column) {
+  }
+  
+  long_name(column) {
       if (this.teams == null){
         return null;
       }
@@ -313,34 +322,32 @@ export default {
         return o.short === column;
       });
       return team.name;
-    },
-    cj_points(column) {
-      if (this.teams == null){
-        return null;
-      }
-      var team = this.lodash.find(this.teams, function(o) {
-        return o.short === column;
-      });
-      return team.cj;
-    },
-    snatch_points(column) {
-      if (this.teams == null){
-        return null;
-      }
-      var team = this.lodash.find(this.teams, function(o) {
-        return o.short === column;
-      });
-      return team.snatch;
-    },
-    total_points(column) {
-      if (this.teams == null){
-        return null;
-      }
-      var team = this.lodash.find(this.teams, function(o) {
-        return o.short === column;
-      });
-      return team.total;
-    }
   }
+  
+  points (column, type: string): number {
+     if (this.teams == null){
+        return 0;
+      }
+      var team = this.lodash.find(this.teams, function(o) {
+        return o.short === column;
+      });
+      if (type === "cj") {
+        return team.cj;
+      }
+      else if (type === "snatch") {
+        return team.snatch;
+      }
+      else if (type === "total") {
+        return team.total;
+      }
+      else if (type === "cj_additional_points") {
+        return team.cj_additional_points;
+      }
+      else if (type === "snatch_additional_points") {
+        return team.snatch_additional_points;
+      }
+      return 0;
+  }
+  
 };
 </script>

@@ -15,36 +15,30 @@
   </v-container>
 </template>
 
-<script>
-export default {
-  data: () => ({
-    headers: [
-        { text: "Start time", value: "start_time" },
-      {
-        text: "Name",
-        align: "left",
-        value: "name"
-      },
-      { text: "Location", value: "location" },
-      
-    ],
-    competitions: [
-      {
-        id: 1,
-        location: "Auwiesen",
-        name: "Wettkampf 1",
-        start_time: "Fri, 28 Dec 2018 14:05:00 GMT",
-        youtube_id: "1234"
-      }
-    ]
-  }), 
-  
-  mounted: function() {
-    this.loadData();
-  },
+<script lang="ts">
+import  Vue from "vue";
+import {Component, Prop} from 'vue-property-decorator';
+import {Header} from  '@/interfaces/Header'
+import {Competition} from  '@/interfaces/Competition'
 
-  methods: {
-    loadData: function() {
+export default class Root extends Vue {
+
+  headers: Header [];
+  competitions: Competition[];
+  constructor(){
+    super();
+    this.headers = [];
+    this.headers.push( { text: "Start time", value: "start_time", sortable:true });
+    this.headers.push( { text: "Name", align: "left", value: "name", sortable:true  });
+    this.headers.push( { text: "Location", value: "location", sortable:true  });
+    this.competitions = [];
+  }
+  
+  mounted() {
+    this.loadData();
+  }
+
+  loadData () {
       var api = this.source + "api/competitions/";
       this.axios.get(api).then(response => {
         this.competitions= response.data;
@@ -52,6 +46,5 @@ export default {
       });
       setTimeout(this.loadData, 15000);
     }
-  }
 };
 </script>

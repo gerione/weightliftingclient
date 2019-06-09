@@ -17,47 +17,50 @@
       </v-layout>
 </template>
 
-<script>
-
+<script lang="ts">
 import Current from './Current'
 import TeamStandings from './TeamStandings'
 import ScoreboardTable from './ScoreboardTable'
+import  Vue from "vue";
+import {Component, Prop, Watch} from 'vue-property-decorator';
 
-
-export default {
-  props: ["competitionid"],
-  data() {
-    return {
-      type:null,
-      competition: {name:"default"},
-    };
-  },
+interface CompetitionItem {
+  id: number;
+  name: string;
+  location?: string;
+  start_time?: string;
+  youtube_id?: string;
+  type?: string;
+}
+ 
+@Component({
   components: {
-    Current, 
-    TeamStandings, 
-    ScoreboardTable
-  },
-   watch: {
-    $route(to, from) {
-      // react to route changes...
-      // here i can ask the api for updates
+    TeamStandings,
+    ScoreboardTable,
+    Current,
+  }
+})
+export default class Competition extends Vue  {
+  @Prop() competitionid: number;
+  type: string = "single";
+  competition: CompetitionItem = {id: -1, name: "default"}; 
+  
+  @Watch('$route', { immediate: true, deep: true })
+    onUrlChange(newVal: any) {
       this.loadCompInfo();
-    }
-  },
-  mounted: function() {
+  }
+  mounted () {
      this.loadCompInfo();
-  },
-  methods: {
-    loadCompInfo: function() { 
-      var api = this.source + "api/competitions/" + this.competitionid + "/";
-     
-      this.axios.get(api).then(response => {
-        this.competition = response.data.competition;
-        this.videoId = response.data.competition.youtube_id;
-        this.type = response.data.competition.type;
-         console.log("route changed" + this.type);
-      });
-    }
+  }
+  
+  loadCompInfo() { 
+    var api = this.source + "api/competitions/" + this.competitionid + "/";
+
+    this.axios.get(api).then(response => {
+      this.competition = response.data.competition;
+      this.type = response.data.competition.type;
+        console.log("route changed" + this.type);
+    });
   }
 };
 </script>
