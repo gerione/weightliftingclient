@@ -18,13 +18,15 @@
 <script lang="ts">
 import  Vue from "vue";
 import {Component, Prop} from 'vue-property-decorator';
-import {Header} from  '@/interfaces/Header'
-import {Competition} from  '@/interfaces/Competition'
+import {Header} from  '@/interfaces/Header';
+import {Competition} from  '@/interfaces/Competition';
 
+@Component()
 export default class Root extends Vue {
 
   headers: Header [];
   competitions: Competition[];
+
   constructor(){
     super();
     this.headers = [];
@@ -42,7 +44,6 @@ export default class Root extends Vue {
       var api = this.source + "api/competitions/";
       this.axios.get(api).then(response => {
         this.competitions= response.data;
-        
       });
       setTimeout(this.loadData, 15000);
     }
