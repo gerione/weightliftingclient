@@ -5,11 +5,15 @@ import App from './App.vue';
 import router from './router';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
+import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 
 import VueYouTube from 'vue-youtube';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import VueLodash from 'vue-lodash';
+
+import VueSocketio from 'vue-socket.io-extended';
+import io from 'socket.io-client';
 
 const options = { name: 'lodash' } // customize the way you want to call it
 Vue.use(VueLodash, options)  
@@ -22,7 +26,12 @@ Vue.component("overlay-layout", Overlay);
 Vue.use(VueAxios, axios)
 Vue.use(VueYouTube)
 Vue.use(Vuetify)
-Vue.config.productionTip = false
+
+Vue.use(VueSocketio, io('http://localhost:5000'));
+
+const opts = {theme: {dark: true,}}
+
+Vue.config.productionTip = false 
 
 
 
@@ -40,7 +49,8 @@ Vue.mixin({
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  vuetify : new Vuetify(opts),
   router,
   components: { App },
   template: '<App/>'
-})
+}).$mount('#app')

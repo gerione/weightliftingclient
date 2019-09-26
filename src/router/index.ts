@@ -7,6 +7,9 @@ import TeamStandings from '@/components/TeamStandings.vue'
 import Admin from '@/components/Admin.vue'
 import ScoreboardTable from '@/components/ScoreboardTable.vue'
 import Weight from '@/components/Weight.vue'
+import Countdown from '@/components/countdown/Countdown.vue'
+import CountdownController from '@/components/countdown/CountdownController.vue'
+import About from '@/components/About.vue'
 
 Vue.use(VueRouter)
 
@@ -25,14 +28,14 @@ export default new VueRouter({
     },
     {
       name: 'Scoreboard',
-      path: '/scoreboard/:competitionid/:type',
+      path: '/competition/:competitionid/scoreboard/:type',
       props: true,
       meta: { layout: "overlay" },
       component: ScoreboardTable
     },
     {
       name: 'current', 
-      path: '/current/:competitionid',
+      path: '/competition/:competitionid/current/',
       meta: { layout: "overlay" },
       props: true,
       component: Current
@@ -46,14 +49,31 @@ export default new VueRouter({
     },
     {
       name: 'weight',
-      path: '/weight/:competitionid',
+      path: '/competition/:competitionid/weight/',
       props: true,
       component: Weight
+    },
+    {
+      name: 'timer',
+      path: '/competition/:competitionid/timer/',
+      props: true,
+      component: Countdown
+    },
+    {
+      name: 'timercontroller',
+      path: '/competition/:competitionid/timer/controller/',
+      props: true,
+      component: CountdownController
     },
     {
       name: 'admin',
       path: '/admin', 
       component: Admin
     },
+    {
+      name: 'about',
+      path: '/about', 
+      component: About
+    }
   ]
 })

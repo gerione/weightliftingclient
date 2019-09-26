@@ -1,17 +1,16 @@
 <template>
-  <div align="center" style="width: 100%;">
+  <v-container>
+    
     <template v-for="(liftersa, key) in groups">
-      <v-container grid-list-md fluid>
-        <v-layout row wrap>
-          <v-flex xs12>
-            <v-card>
+      <v-row  class="grey darken-3" >
+        <v-col>
               <v-data-table
                 :headers="headers"
                 :items="liftersa"
                 :pagination.sync="pagination"
-                select-all
+      
                 item-key="name"
-                hide-actions
+                hide-default-footer
                 class="elevation-1"
                 dark
                 must-sort
@@ -222,12 +221,11 @@
                   </tr>
                 </template>
               </v-data-table>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
+        </v-col>
+      </v-row>
+      <v-row><v-col></v-col></v-row>
     </template>
-  </div>
+  </v-container>
 </template>
 
 <script lang="ts">

@@ -1,43 +1,45 @@
 <template>
-  <v-app dark>
+  <v-app >
     <v-navigation-drawer
-      persistent
-      :mini-variant="miniVariant"
-      :clipped="clipped"
+          clipped
       v-model="drawer"
-      enable-resize-watcher
-      fixed
       app
     >
+      
       <v-list>
-          <v-list-tile v-for="item in competitions" :key="item.text" avatar 
-            :to="item.id"
+          <v-list-item v-for="item in items" :key="item.text"
+            :to="item.link"
           >
-            <v-list-tile-content>
-              <v-list-tile-title v-text="item.name"></v-list-tile-title>
-              <v-list-tile-sub-title v-text="item.location">Test</v-list-tile-sub-title>
-            </v-list-tile-content>
+                        <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
             
-          </v-list-tile>
+          </v-list-item>
         </v-list>
     </v-navigation-drawer>
-    <v-toolbar
+    <v-app-bar
+       clipped-left
+      shrink-on-scroll
       app
-      :clipped-left="clipped"
     >
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       
      
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
     
-    </v-toolbar>
+    </v-app-bar>
     <v-content>
       <slot />
     </v-content>
     
     <v-footer :fixed="fixed" app>
-      <span>&copy; Gerald Kettlgruber - SK VÖEST - 2018</span>
+      <span>&copy; Gerald Kettlgruber - SK VÖEST - 2019  </span> 
     </v-footer>
   </v-app>
 </template>
@@ -47,32 +49,15 @@ export default {
   data() {
     return {
       clipped: true,
-      drawer: true,
+      drawer: false,
       fixed: true,
-      competitions: [
-        { picture: 28, name: "NL: SKV II - VSD1", id: "/competition/1" }
-      ],
-      miniVariant: false,
+      items: [
+          { title: 'Home', icon: 'dashboard', link: '/'},
+          { title: 'About', icon: 'question_answer', link: '/about/' },
+        ],
       title: "SK VÖEST Gewichtheben - LIVE"
     };
   },
   name: "App",
-
-  mounted: function() {
-    this.loadData();
-  },
-
-  methods: {
-    loadData: function() {
-      var api = this.source + "api/competitions/";
-      this.axios.get(api).then(response => {
-        this.competitions=[]
-        response.data.forEach(element => {
-          this.competitions.push({picture:28, name: element.name, id:"/competition/" + element.id, location: element.location})
-        });
-      });
-      setTimeout(this.loadData, 15000);
-    }
-  }
 };
 </script>
