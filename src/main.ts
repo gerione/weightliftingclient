@@ -4,6 +4,9 @@ import Vue from 'vue'
 import App from './App.vue';
 import router from './router';
 import Vuetify from 'vuetify';
+
+
+
 import 'vuetify/dist/vuetify.min.css';
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 
@@ -19,19 +22,27 @@ const options = { name: 'lodash' } // customize the way you want to call it
 Vue.use(VueLodash, options)  
 import Default from "./layouts/Default.vue";
 import Overlay from "./layouts/Overlay.vue";
+import Chartkick from 'vue-chartkick';
+import Chart from 'chart.js';
 
+ 
 Vue.component("default-layout", Default);
 Vue.component("overlay-layout", Overlay);
 
-Vue.use(VueAxios, axios)
-Vue.use(VueYouTube)
-Vue.use(Vuetify)
+Vue.use(VueAxios, axios);
+Vue.use(VueYouTube);
+Vue.use(Vuetify);
 
-Vue.use(VueSocketio, io('http://localhost:5000'));
+Vue.use(Chartkick.use(Chart));
 
-const opts = {theme: {dark: true,}}
+//const server = 'http://localhost:5000';
+const server = "https://weightliftingoverlay.herokuapp.com/";
 
-Vue.config.productionTip = false 
+Vue.use(VueSocketio, io(server));
+
+const opts = {theme: {dark: true,}};
+
+Vue.config.productionTip = false ;
 
 
 
@@ -39,17 +50,19 @@ Vue.mixin({
   data: function() {
     return {
       get source() {
-        //return "https://weightliftingoverlay.herokuapp.com/";
-        return "http://localhost:5000/";
+        return server;
       }
     }
   }
-})
+});
+
+const vuetify1 = new Vuetify(opts);
+
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  vuetify : new Vuetify(opts),
+  vuetify : vuetify1,
   router,
   components: { App },
   template: '<App/>'

@@ -13,6 +13,7 @@
         <TeamStandings v-if="type === 'team'" :competitionid="competitionid" />
       </v-col>
     </v-row>
+
     <v-row>
       <v-col>
         <ScoreboardTable :competitionid="competitionid" :type="type"></ScoreboardTable>

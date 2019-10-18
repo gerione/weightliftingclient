@@ -1,351 +1,358 @@
 <template>
   <v-container>
-    
     <template v-for="(liftersa, key) in groups">
-      <v-row  class="grey darken-3" >
+      <v-row class="grey darken-3">
         <v-col>
-              <v-data-table
-                :headers="headers"
-                :items="liftersa"
-                :pagination.sync="pagination"
-      
-                item-key="name"
-                hide-default-footer
-                class="elevation-1"
-                dark
-                must-sort
+          <v-data-table
+            :headers="computedHeaders"
+            :items="liftersa"
+            item-key="name"
+            hide-default-footer
+            dark
+            must-sort
+          >
+            <template v-slot:no-data>
+              <v-alert :value="true" color="success" type="success">Wettkampf wird geladen!</v-alert>
+            </template>
 
-              >
-                <template v-slot:no-data>
-                  <v-alert
-                    :value="true"
-                    color="success"
-                    type="success"
-                  >Wettkampf wird geladen!</v-alert>
-                </template>
-                <template v-slot:headers="props">
-                  <tr>
-                    <th
-                      v-for="header in props.headers"
-                      :key="header.text"
-                      :colspan="header.span"
-                      :width="header.width"
-                    >{{ header.text }}</th>
-                  </tr>
-                </template>
-                <template v-slot:items="props">
-                  <td class="subheading">{{ props.item.name }}</td>
-                  <td v-if="type === 'single'" class="text-xs-center subheading">{{ props.item.masterdata.club_single_short }}</td>
-                  <td v-else class="text-xs-center subheading">{{ props.item.team.short }}</td>
-                  <td class="text-xs-center subheading">{{ props.item.weightclass.name }}</td>
-                  <td class="text-xs-center subheading">{{ props.item.sf }}</td>
-                  <template v-for="lifts in props.item.lifts.slice(0,3)">
-                    <td class="text-xs-center">
-                      <v-sheet
-                        label
-                        v-if="lifts.result === 2"
-                        :width="50"
-                        color="green"
-                        text-color="white"
-                        class="font-weight-black subheading"
-                      >{{lifts.weight}}</v-sheet>
-                      <v-sheet
-                        label
-                        v-else-if="lifts.result === 1"
-                        :width="50"
-                        color="red"
-                        text-color="white"
-                        class="font-weight-black subheading"
-                      >{{lifts.weight}}</v-sheet>
-                      <v-sheet
-                        label
-                        v-else-if="lifts.result === 0"
-                        :width="50"
-                        color="black"
-                        text-color="white"
-                        class="font-weight-black subheading"
-                      >{{lifts.weight}}</v-sheet>
-                    </td>
-                  </template>
-                  <td class="text-xs-center">
+            <template v-slot:item.snatch="{ item  }">
+               <v-row no-gutters>
+                <template v-for="lift in item.lifts.slice(0,3)">
+                  <v-col cols="4" sm="4" md="4" lg="4">
                     <v-sheet
                       label
-                      :width="70"
-                      color="grey"
+                      v-if="lift.result === 2"
+                      :width="40"
+                      color="green"
                       text-color="white"
-                      class="font-weight-black subheading"
-                    >{{props.item.snatch_points | round}}</v-sheet>
-                  </td>
-                  <template v-for="lifts in props.item.lifts.slice(3,6)">
-                    <td class="text-xs-center">
-                      <v-sheet
-                        label
-                        v-if="lifts.result === 2"
-                        :width="50"
-                        color="green"
-                        text-color="white"
-                        class="font-weight-black subheading"
-                      >{{lifts.weight}}</v-sheet>
-                      <v-sheet
-                        label
-                        v-else-if="lifts.result === 1"
-                        :width="50"
-                        color="red"
-                        text-color="white"
-                        class="font-weight-black subheading"
-                      >{{lifts.weight}}</v-sheet>
-                      <v-sheet
-                        label
-                        v-else-if="lifts.result === 0"
-                        :width="50"
-                        color="black"
-                        text-color="white"
-                        class="font-weight-black subheading"
-                      >{{lifts.weight}}</v-sheet>
-                    </td>
-                  </template>
-                  <td class="text-xs-center">
+                      class="font-weight-black subheading text-center"
+                    >{{lift.weight}}</v-sheet>
                     <v-sheet
                       label
-                      :width="70"
-                      color="grey"
+                      v-else-if="lift.result === 1"
+                      :width="40"
+                      color="red"
                       text-color="white"
-                      class="font-weight-black subheading"
-                    >{{props.item.cj_points | round}}</v-sheet>
-                  </td>
-                  <td class="text-xs-center">
+                      class="font-weight-black subheading text-center"
+                    >{{lift.weight}}</v-sheet>
                     <v-sheet
                       label
-                      :width="70"
-                      color="grey"
+                      v-else-if="lift.result === 0"
+                      :width="40"
+                      color="black"
                       text-color="white"
-                      class="font-weight-black subheading"
-                    >{{ (props.item.max_cj+ + props.item.max_snatch) }}</v-sheet>
-                  </td>
-                  <td class="text-xs-center">
+                      class="font-weight-black subheading text-center"
+                    >{{lift.weight}}</v-sheet>
+                  </v-col>
+                </template>
+               </v-row>
+            </template>
+            <template v-slot:item.cj="{ item  }">
+              <v-row no-gutters>
+                <template v-for="lift in item.lifts.slice(3,6)">
+                  <v-col cols="4" sm="4" md="4" lg="4">
+                    <v-sheet
+                      v-if="lift.result === 2"
+                      :width="40"
+                      color="green"
+                      text-color="white"
+                      class="font-weight-black subheading text-center"
+                    >{{lift.weight}}</v-sheet>
+                    <v-sheet
+                      v-else-if="lift.result === 1"
+                      :width="40"
+                      color="red"
+                      text-color="white"
+                      class="font-weight-black subheading text-center"
+                    >{{lift.weight}}</v-sheet>
                     <v-sheet
                       label
-                      :width="70"
+                      v-else-if="lift.result === 0"
+                      :width="40"
+                      color="black"
+                      text-color="white"
+                      class="font-weight-black subheading text-center"
+                    >{{lift.weight}}</v-sheet>
+                  </v-col>
+                </template>
+              </v-row>
+            </template>
+            <template v-slot:item.total="{ item  }">
+              <v-row no-gutters>
+                 <v-col cols="6" sm="6" md="6" lg="6">
+                    <v-sheet
+                      label
+                      :width="50"
                       color="grey"
                       text-color="white"
-                      class="font-weight-black subheading"
-                    >{{(props.item.cj_points + props.item.snatch_points) | round}}</v-sheet>
-                  </td>
-                </template>
-                <template v-if="type === 'team'" v-slot:footer>
-                  <tr>
-                    <td :colspan="4" rowspan="2">
-                      <span class="headline">{{ long_name(key) }}</span>
-                    </td>
-                    <td :colspan="3">
-                      <strong>Jugendpunkte</strong>
-                    </td>
-                    <td class="text-xs-center" :colspan="1">
-                      <v-sheet
-                        label
-                        color="grey"
-                        text-color="white"
-                        :width="70"
-                        class="font-weight-black subheading"
-                      >{{points(key, "snatch_additional_points") | round}}</v-sheet>
-                    </td>
-                    <td :colspan="3">
-                      <strong></strong>
-                    </td>
-                    <td class="text-xs-center" :colspan="1">
-                      <v-sheet
-                        label
-                        color="grey"
-                        text-color="white"
-                        :width="70"
-                        class="font-weight-black subheading"
-                      >{{points(key, "cj_additional_points")  | round}}</v-sheet>
-                    </td>
-                    <td :colspan="1">
-                      <strong></strong>
-                    </td>
-                    <td class="text-xs-center" :colspan="1">
-                      <v-sheet
-                        label
-                        color="grey"
-                        text-color="white"
-                        :width="70"
-                        class="font-weight-black subheading"
-                      >{{(points(key, "snatch_additional_points") + points(key, "cj_additional_points") ) | round}}</v-sheet>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td :colspan="3">
-                      <strong>Summe</strong>
-                    </td>
-                    <td class="text-xs-center" :colspan="1">
-                      <v-sheet
-                        label
-                        color="grey"
-                        text-color="white"
-                        :width="70"
-                        class="font-weight-black subheading"
-                      >{{points(key, "snatch") | round}}</v-sheet>
-                    </td>
-                    <td :colspan="3">
-                      <strong></strong>
-                    </td>
-                    <td class="text-xs-center" :colspan="1">
-                      <v-sheet
-                        label
-                        color="grey"
-                        text-color="white"
-                        :width="70"
-                        class="font-weight-black subheading"
-                      >{{points(key, "cj") | round}}</v-sheet>
-                    </td>
-                    <td :colspan="1">
-                      <strong></strong>
-                    </td>
-                    <td class="text-xs-center" :colspan="1">
-                      <v-sheet
-                        label
-                        color="grey"
-                        text-color="white"
-                        :width="70"
-                        class="font-weight-black subheading"
-                      >{{points(key, "total") | round}}</v-sheet>
-                    </td>
-                  </tr>
-                </template>
-                <template v-else-if="type=== 'single'" v-slot:footer>
-                  <tr>
-                    <td :colspan="14" rowspan="1">
-                      <span class="headline">{{ key }}</span>
-                    </td>
-                  </tr>
-                </template>
-              </v-data-table>
+                      class="font-weight-black subheading text-center"
+                    >{{(item.max_cj + item.max_snatch)}}</v-sheet>
+                  </v-col>
+                  <v-col cols="6" sm="6" md="6" lg="6">
+                    <v-sheet
+                      label
+                      :width="50"
+                      color="grey"
+                      text-color="white"
+                      class="font-weight-black subheading text-center"
+                    >{{(item.cj_points + item.snatch_points) | round}}</v-sheet>
+                  </v-col>
+              </v-row>
+            </template>
+            <template v-if="type === 'team' && $vuetify.breakpoint.smAndUp" v-slot:body.append>
+              <tr>
+                <td colspan="3" rowspan="2">
+                  <span class="headline">{{ long_name(key) }}</span>
+                </td>
+                <td >
+                  <strong>Jugendpunkte</strong>
+                </td>
+                <td class="text-xs-center" :colspan="1">
+                  <v-sheet
+                    label
+                    color="grey"
+                    text-color="white"
+                    :width="70"
+                    class="font-weight-black subheading text-center"
+                  >{{points(key, "snatch_additional_points") | round}}</v-sheet>
+                </td>
+                
+                <td class="text-xs-center">
+                  <v-sheet
+                    label
+                    color="grey"
+                    text-color="white"
+                    :width="70"
+                    class="font-weight-black subheading text-center"
+                  >{{points(key, "cj_additional_points") | round}}</v-sheet>
+                </td>
+                
+                <td class="text-xs-center" >
+                  <v-sheet
+                    label
+                    color="grey"
+                    text-color="white"
+                    :width="70"
+                    class="font-weight-black subheading text-center"
+                  >{{(points(key, "snatch_additional_points") + points(key, "cj_additional_points") ) | round}}</v-sheet>
+                </td>
+              </tr>
+              <tr>
+                <td >
+                  <strong>Summe</strong>
+                </td>
+                <td class="text-xs-center" >
+                  <v-sheet
+                    label
+                    color="grey"
+                    text-color="white"
+                    :width="70"
+                    class="font-weight-black subheading text-center"
+                  >{{points(key, "snatch") | round}}</v-sheet>
+                </td>
+               
+                <td class="text-xs-center" >
+                  <v-sheet
+                    label
+                    color="grey"
+                    text-color="white"
+                    :width="70"
+                    class="font-weight-black subheading text-center"
+                  >{{points(key, "cj") | round}}</v-sheet>
+                </td>
+                
+                <td class="text-xs-center" >
+                  <v-sheet
+                    label
+                    color="grey"
+                    text-color="white"
+                    :width="70"
+                    class="font-weight-black subheading text-center"
+                  >{{points(key, "total") | round}}</v-sheet>
+                </td>
+              </tr>
+            </template>
+            <template v-else-if="type=== 'single' && $vuetify.breakpoint.smAndUp" v-slot:body.append>
+              <tr>
+                <td :colspan="14" rowspan="1">
+                  <span class="headline">{{ key }}</span>
+                </td>
+              </tr>
+            </template>
+          </v-data-table>
         </v-col>
       </v-row>
-      <v-row><v-col></v-col></v-row>
+      <v-row>
+        <v-col></v-col>
+      </v-row>
     </template>
   </v-container>
 </template>
 
 <script lang="ts">
-import  Vue from "vue";
-import {Component, Prop} from 'vue-property-decorator';
-import {Team} from  '@/interfaces/Team'
-import {Header} from  '@/interfaces/Header'
+import Vue from "vue";
+import { Component, Prop } from "vue-property-decorator";
+import { Team } from "@/interfaces/Team";
+import { Header } from "@/interfaces/Header";
 
 export interface Lifter {
-    name:string;
+  name: string;
 }
-  
 
-export interface Pagination{
-    rowsPerPage: number;
-    sortBy: string;
+export interface Pagination {
+  rowsPerPage: number;
+  sortBy: string;
 }
 
 @Component({
-  filters: { round(value:number) { 
-    if (value == null)
-      return 0;
-    return value.toFixed(2); } },
+  filters: {
+    round(value: number) {
+      if (value == null) return 0;
+      return value.toFixed(2);
+    }
+  }
 })
-
 export default class ScoreboardTable extends Vue {
   @Prop() competitionid: number;
   @Prop() type: string;
 
   teams: Team[];
   lifters: Lifter[];
-  headers: Header [];
+  headers: Header[];
   pagination: Pagination;
-  constructor(){
+  constructor() {
     super();
     this.teams = [];
     this.lifters = [];
     this.headers = [];
-    this.headers.push({ text: "Name", align: "left", value: "name", span: 1, width: 250 , sortable: false});
-    this.headers.push({ text: "Team", value: "team.short", span: 1, width: 30 , sortable: false});
-    this.headers.push({ text: "Klasse", value: "weightclass.name", span: 1, width: 50, sortable: true });
-    this.headers.push({ text: "SF", value: "sf", span: 1, width: 50 , sortable: false});
-    this.headers.push({ text: "Reißen", value: "lifts.weight", span: 4, width: 80, sortable: false });
-    this.headers.push({ text: "Stoßen", value: "lifts.weight", span: 4, width: 80 , sortable: false});
-    this.headers.push({ text: "Zweikampf", value: "lifts.weight", span: 4, width: 30, sortable: false });
-    this.pagination = {rowsPerPage: -1, sortBy: "weightclass.id",};
+    this.headers.push({
+      text: "Name",
+      align: "left",
+      value: "name",
+      span: 1,
+      width: 200,
+      sortable: false
+    });
+    this.headers.push({
+      text: "Team",
+      value: "team.short",
+      span: 1,
+      width: 30,
+      sortable: false
+    });
+   
+this.headers.push({
+      text: "Klasse",
+      value: "weightclass.name",
+      span: 1,
+      width: 50,
+      sortable: true
+    });
+       
+    this.headers.push({
+      text: "SF",
+      value: "sf",
+      span: 1,
+      width: 50,
+      sortable: false
+    });
+    this.headers.push({
+      text: "Reißen",
+      value: "snatch",
+      span: 4,
+      width: 80,
+      sortable: false
+    });
+    this.headers.push({
+      text: "Stoßen",
+      value: "cj",
+      span: 4,
+      width: 80,
+      sortable: false
+    });
+    this.headers.push({
+      text: "Zweikampf",
+      value: "total",
+      span: 4,
+      width: 30,
+      sortable: false
+    });
+    this.pagination = { rowsPerPage: -1, sortBy: "weightclass.id" };
   }
 
   get groups() {
-      if (this.lifters == null){
-        return null;
-      }
-        
-      if (this.type === "single") {
-        return {"Wettkampf": this.lodash.sortBy(this.lifters, "weightclass.id")};
-      } else {
-        return this.lodash.groupBy(this.lifters, "team.short");
-      }
+    if (this.lifters == null) {
+      return null;
+    }
+
+    if (this.type === "single") {
+      return { Wettkampf: this.lodash.sortBy(this.lifters, "weightclass.id") };
+    } else {
+      return this.lodash.groupBy(this.lifters, "team.short");
+    }
   }
 
+  get computedHeaders () {
+    console.log(this.type);
+    return this.headers;
+  }
   mounted() {
     this.loadData();
   }
 
   loadData() {
-      var api = this.source + "api/competitions/" + this.competitionid + "/lifters/";
-      this.axios
-        .get(api)
-        .then(response => {
-          this.lifters = response.data;
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-      var api = this.source + "api/competitions/" + this.competitionid + "/teams/";
-      this.axios
-        .get(api)
-        .then(response => {
-          this.teams = response.data;
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-      setTimeout(this.loadData, 5000);
+    var api =
+      this.source + "api/competitions/" + this.competitionid + "/lifters/";
+    this.axios
+      .get(api)
+      .then(response => {
+        this.lifters = response.data;
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+    var api =
+      this.source + "api/competitions/" + this.competitionid + "/teams/";
+    this.axios
+      .get(api)
+      .then(response => {
+        this.teams = response.data;
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+    setTimeout(this.loadData, 5000);
   }
-  
+
   long_name(column) {
-      if (this.teams == null){
-        return null;
-      }
-      var team = this.lodash.find(this.teams, function(o) {
-        return o.short === column;
-      });
-      return team.name;
+    if (this.teams == null) {
+      return null;
+    }
+    var team = this.lodash.find(this.teams, function(o) {
+      return o.short === column;
+    });
+    return team.name;
   }
-  
-  points (column, type: string): number {
-     if (this.teams == null){
-        return 0;
-      }
-      var team = this.lodash.find(this.teams, function(o) {
-        return o.short === column;
-      });
-      if (type === "cj") {
-        return team.cj;
-      }
-      else if (type === "snatch") {
-        return team.snatch;
-      }
-      else if (type === "total") {
-        return team.total;
-      }
-      else if (type === "cj_additional_points") {
-        return team.cj_additional_points;
-      }
-      else if (type === "snatch_additional_points") {
-        return team.snatch_additional_points;
-      }
+
+  points(column, type: string): number {
+    if (this.teams == null) {
       return 0;
+    }
+    var team = this.lodash.find(this.teams, function(o) {
+      return o.short === column;
+    });
+    if (type === "cj") {
+      return team.cj;
+    } else if (type === "snatch") {
+      return team.snatch;
+    } else if (type === "total") {
+      return team.total;
+    } else if (type === "cj_additional_points") {
+      return team.cj_additional_points;
+    } else if (type === "snatch_additional_points") {
+      return team.snatch_additional_points;
+    }
+    return 0;
   }
-  
-};
+}
 </script>

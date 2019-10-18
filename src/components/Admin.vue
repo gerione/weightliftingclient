@@ -86,7 +86,7 @@ import  Vue from "vue";
 import {Component, Prop, Watch} from 'vue-property-decorator';
 import {Header} from  '@/interfaces/Header'
 import {Competition} from  '@/interfaces/Competition'
-import {source} from  '@/mixin.ts'
+import {source} from  '@/mixin'
 
 
 @Component()

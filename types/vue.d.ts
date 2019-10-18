@@ -12,4 +12,6 @@ declare module 'socket.io';
 declare module 'vue-socket.io';
 declare module 'vue-socket.io-extended';
 declare module 'socket.io-client';
-
+declare module 'vue-google-charts'
+declare module 'vue-chartkick';
+declare module 'chart.js';

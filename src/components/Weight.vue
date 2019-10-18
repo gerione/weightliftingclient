@@ -1,17 +1,17 @@
 <template>
     <svg width="100%" height="100%">
 
-    <rect x="10%" y="45%" rx="10" ry="10" width="80%" height="10%" style="fill:grey;stroke:black;stroke-width:4;opacity:1" />
+    <rect x="10%" y="47%" rx="10" ry="10" width="80%" height="6%" style="fill:grey;stroke:black;stroke-width:4;opacity:1" />
+    <rect x="45%" y="44%" rx="10" ry="10" width="45%" height="12%" style="fill:grey;stroke:black;stroke-width:4;opacity:1" />
 
-    <rect x="30%" y="41%" rx="10" ry="10" width="5%" height="18%" style="fill:grey;stroke:black;stroke-width:4;opacity:1" />
+    <rect x="35%" y="41%" rx="10" ry="10" width="5%" height="18%" style="fill:grey;stroke:black;stroke-width:4;opacity:1" />
     Sorry, your browser does not support inline SVG.
 
-    <text v-if="lifter.sex == true" x="12%" y="50%"  font-size="22" fill="red">FEMALE</text>
+    <text v-if="lifter.sex == true" x="12%" y="52%"  font-size="5vh" font-weight="bold" fill="red">F</text>
     <template v-for="disc in weightDiscs">
-        <rect :x="(disc.x+35)+'%'" :y="(50-disc.height/2)+'%'" rx="10" ry="10" :width="disc.width+'%'" :height="disc.height+'%'" :style="'fill:'+ disc.color + ';stroke:black;stroke-width:4;opacity:1'" />
+        <rect :x="(disc.x+40)+'%'" :y="(50-disc.height/2)+'%'" rx="10" ry="10" :width="disc.width+'%'" :height="disc.height+'%'" :style="'fill:'+ disc.color + ';stroke:black;stroke-width:4;opacity:1'" />
     </template>
     </svg>
-
 </template>
 
 
@@ -21,6 +21,7 @@
 export default {
   data() {
     return {
+      weight:0,
       lifter: {
         id: 12,
         lifter_id: 4945,
@@ -82,7 +83,7 @@ export default {
           {
             weight: 25,
             color: "red",
-            width: 5, 
+            width: 6, 
             height: 80, 
             type: "disc",
             amount: -1
@@ -90,7 +91,7 @@ export default {
           {
             weight: 20,
             color: "blue",
-            width: 4.5, 
+            width: 5, 
             height: 80,
             type: "disc",
             amount: -1
@@ -98,7 +99,7 @@ export default {
           {
             weight: 15,
             color: "yellow",
-            width: 4.0, 
+            width: 4.5, 
             height: 80,
             type: "disc",
             amount: -1
@@ -106,7 +107,7 @@ export default {
           {
             weight: 10,
             color: "green",
-            width: 3.0, 
+            width: 3.5, 
             height: 80,
             type: "disc",
             amount: 1
@@ -114,7 +115,7 @@ export default {
           {
             weight: 5,
             color: "white",
-            width: 2.0, 
+            width: 2.5, 
             height: 50,
             type: "disc",
             amount: 1
@@ -131,7 +132,7 @@ export default {
             weight: 2.5,
             color: "Silver",
             width: 7, 
-            height: 22,
+            height: 24,
             type: "collar",
             amount: 1
           },
@@ -139,7 +140,7 @@ export default {
             weight: 2.0,
             color: "blue",
             width: 1.0, 
-            height: 50,
+            height: 35,
             type: "disc",
             amount: 1
           },
@@ -147,7 +148,7 @@ export default {
             weight: 1.5,
             color: "yellow",
             width: 1.0, 
-            height: 45,
+            height: 30,
             type: "disc",
             amount: 1
           },
@@ -155,7 +156,7 @@ export default {
             weight: 1.0,
             color: "green",
             width: 1.0, 
-            height: 40,
+            height: 25,
             type: "disc",
             amount: 1
           },
@@ -163,7 +164,7 @@ export default {
             weight: 0.5,
             color: "white",
             width: 1.0, 
-            height: 30,
+            height: 20,
             type: "disc",
             amount: 1
           },
@@ -196,7 +197,7 @@ export default {
   methods: {
       weightToDiscs:function (weight, disc, x){
           if (weight <= 0) {
-            if (disc[0].weight > 2.5) {
+            if (disc[0].weight >= 2.5) {
               var collar = this.lodash.find (disc, function(o) { return o.type === "collar"; });
               var disc1 = {
                 color: collar.color,

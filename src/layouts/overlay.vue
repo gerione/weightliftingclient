@@ -1,5 +1,5 @@
 <template>
-<v-app class="transparent">
+<v-app  style="background: rgba(0,0,0,0);" >
   <v-content >
     <v-container fluid>
       <slot />

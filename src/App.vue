@@ -1,10 +1,13 @@
+
 <template>
   <component :is="layout">
     <router-view />
   </component>
 </template>
 
+
 <script>
+
 const default_layout = "default";
 
 export default {

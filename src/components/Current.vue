@@ -1,116 +1,115 @@
 <template>
   <v-container class="grey darken-3">
     <v-row no-gutters>
-      <v-col cols="12">
-        <span class="headline">{{lifter.name}}</span>
+      <v-col cols="12" sm="12" md="4" lg="4">
+        <span class="headline font-weight-bold">{{lifter.name}} // {{lifter.masterdata.club_single_short}}</span>
+      </v-col>
+      <v-col cols="12" sm="12" md="3" lg="3" class="mt-1" >
+        <span
+          class="subtitle-1 font-weight-bold" 
+        >Sinclair: {{lifter.sf}}</span>
       </v-col>
     </v-row>
-    <v-row no-gutters>
-      <v-col>
-        <span
-          class="subtitle-1"
-        >Verein: {{lifter.masterdata.club_single_short}} &nbsp; | &nbsp; Sinclair: {{lifter.sf}}</span>
-      </v-col>
     </v-row>
     <v-row no-gutters>
       <template v-for="lift in lifter.lifts.slice(0, 3)">
         <v-col cols="3" sm="3" md="1" lg="1">
-          <v-chip
+          <v-sheet
             label
             v-if="lift.result === 2"
             :width="50"
             color="green"
             text-color="white"
-            class="font-weight-black subheading"
-          >{{lift.weight}}</v-chip>
-          <v-chip
+            class="font-weight-black subheading text-center"
+          >{{lift.weight}}</v-sheet>
+          <v-sheet
             label
             v-else-if="lift.result === 1"
             :width="50"
             color="red"
             text-color="white"
-            class="font-weight-black subheading"
-          >{{lift.weight}}</v-chip>
-          <v-chip
+            class="font-weight-black subheading text-center"
+          >{{lift.weight}}</v-sheet>
+          <v-sheet
             label
             v-else-if="lift.result === 0"
             :width="50"
             color="black"
             text-color="white"
-            class="font-weight-black subheading"
-          >{{lift.weight}}</v-chip>
+            class="font-weight-black subheading text-center"
+          >{{lift.weight}}</v-sheet>
         </v-col>
       </template>
       
       
       <v-col cols="3" sm="3" md="1" lg="1">
-        <v-chip
+        <v-sheet
           label
           :width="80"
           color="grey"
           text-color="white"
-          class="font-weight-black subheading"
-        >{{this.snatch() * this.lifter.sf | round }}</v-chip>
+          class="font-weight-black subheading text-center"
+        >{{this.snatch() * this.lifter.sf | round }}</v-sheet>
       </v-col>
 
       <v-col cols="3" sm="3" md="1" lg="1" v-if="$vuetify.breakpoint.mdAndUp"> </v-col>
       <template v-for="lift in lifter.lifts.slice(3, 6)">
         <v-col cols="3" sm="3" md="1" lg="1">
-          <v-chip
+          <v-sheet
             label
             v-if="lift.result === 2"
             :width="50"
             color="green"
             text-color="white"
-            class="font-weight-black subheading"
-          >{{lift.weight}}</v-chip>
-          <v-chip
+            class="font-weight-black subheading text-center"
+          >{{lift.weight}}</v-sheet>
+          <v-sheet
             label
             v-else-if="lift.result === 1"
             :width="50"
             color="red"
             text-color="white"
-            class="font-weight-black subheading"
-          >{{lift.weight}}</v-chip>
-          <v-chip
+            class="font-weight-black subheading text-center"
+          >{{lift.weight}}</v-sheet>
+          <v-sheet
             label
             v-else-if="lift.result === 0"
             :width="50"
             color="black"
             text-color="white"
-            class="font-weight-black subheading"
-          >{{lift.weight}}</v-chip>
+            class="font-weight-black subheading text-center"
+          >{{lift.weight}}</v-sheet>
         </v-col>
       </template>
 
       <v-col cols="3" sm="3" md="1" lg="1">
-        <v-chip
+        <v-sheet
           label
           :width="80"
           color="grey"
           text-color="white"
-          class="font-weight-black subheading"
-        >{{this.cj() * this.lifter.sf | round }}</v-chip>
+          class="font-weight-black subheading text-center"
+        >{{this.cj() * this.lifter.sf | round }}</v-sheet>
       </v-col>
       
       <v-col cols="3" sm="3" md="1" lg="1"  v-if="$vuetify.breakpoint.mdAndUp"> </v-col>
       <v-col cols="3" sm="3" md="1" lg="1">
-        <v-chip
+        <v-sheet
           label
           :width="50"
           color="grey"
           text-color="white"
-          class="font-weight-black subheading"
-        >{{this.total()}}</v-chip>
+          class="font-weight-black subheading text-center"
+        >{{this.total()}}</v-sheet>
       </v-col>
       <v-col cols="3" sm="3" md="1" lg="1" >
-        <v-chip
+        <v-sheet
           label
           :width="80"
           color="grey"
           text-color="white"
-          class="font-weight-black subheading"
-        >{{this.points() | round}}</v-chip>
+          class="font-weight-black subheading text-center"
+        >{{this.points() | round}}</v-sheet>
       </v-col>
     </v-row>
   </v-container>
@@ -247,7 +246,6 @@ export default class Current extends Vue {
       "api/competitions/" +
       this.competitionid +
       "/lifters/current/";
-    console.log(api);
     this.axios
       .get(api)
       .then(response => {

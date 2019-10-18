@@ -42,7 +42,7 @@ export default new VueRouter({
     },
     {
       name: 'teamstandings',
-      path: '/team/:competitionid',
+      path: '/competition/:competitionid/team/',
       meta: { layout: "overlay" },
       props: true,
       component: TeamStandings

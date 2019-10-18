@@ -6,14 +6,16 @@ const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
-function resolve (dir) {
+var MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
 
 
 module.exports = {
-  
+
   context: path.resolve(__dirname, '../'),
   entry: {
     app: './src/main.ts'
@@ -26,7 +28,7 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.ts','.js', '.vue', '.json'],
+    extensions: ['.ts', '.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
@@ -39,12 +41,12 @@ module.exports = {
         test: /\.ts$/,
         exclude: /node_modules|vue\/src/,
         use: [{
-                loader: 'ts-loader',
-                options: {
-                    appendTsSuffixTo: [/\.vue$/]
-                }
-            }]
-    },
+          loader: 'ts-loader',
+          options: {
+            appendTsSuffixTo: [/\.vue$/]
+          }
+        }]
+      },
       {
         test: /\.vue$/,
         loader: 'vue-loader',
@@ -78,6 +80,15 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          process.env.NODE_ENV !== 'production'
+            ? 'vue-style-loader'
+            : MiniCssExtractPlugin.loader,
+          'css-loader'
+        ]
       }
     ]
   },
