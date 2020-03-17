@@ -10,6 +10,9 @@ import Weight from '@/components/Weight.vue'
 import Countdown from '@/components/countdown/Countdown.vue'
 import CountdownController from '@/components/countdown/CountdownController.vue'
 import About from '@/components/About.vue'
+import store from "../store";
+
+
 
 Vue.use(VueRouter)
 
@@ -19,7 +22,8 @@ export default new VueRouter({
       name: 'competition',
       path: '/competition/:competitionid', 
       props: true,
-      component: Competition
+      component: Competition,
+      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
     },
     {
       name: 'home',
@@ -31,39 +35,45 @@ export default new VueRouter({
       path: '/competition/:competitionid/scoreboard/:type',
       props: true,
       meta: { layout: "overlay" },
-      component: ScoreboardTable
+      component: ScoreboardTable,
+      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
     },
     {
       name: 'current', 
       path: '/competition/:competitionid/current/',
       meta: { layout: "overlay" },
       props: true,
-      component: Current
+      component: Current,
+      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
     },
     {
       name: 'teamstandings',
       path: '/competition/:competitionid/team/',
       meta: { layout: "overlay" },
       props: true,
-      component: TeamStandings
+      component: TeamStandings,
+      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
     },
     {
       name: 'weight',
       path: '/competition/:competitionid/weight/',
       props: true,
-      component: Weight
+      component: Weight,
+      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
     },
     {
       name: 'timer',
       path: '/competition/:competitionid/timer/',
       props: true,
-      component: Countdown
+      component: Countdown,
+      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
     },
     {
       name: 'timercontroller',
       path: '/competition/:competitionid/timer/controller/',
       props: true,
-      component: CountdownController
+      component: CountdownController,
+      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
     },
     {
       name: 'admin',
@@ -77,3 +87,4 @@ export default new VueRouter({
     }
   ]
 })
+

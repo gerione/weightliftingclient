@@ -7,78 +7,18 @@
     <rect x="35%" y="41%" rx="10" ry="10" width="5%" height="18%" style="fill:grey;stroke:black;stroke-width:4;opacity:1" />
     Sorry, your browser does not support inline SVG.
 
-    <text v-if="lifter.sex == true" x="12%" y="52%"  font-size="5vh" font-weight="bold" fill="red">F</text>
+    <text v-if="sex == true" x="12%" y="52%"  font-size="5vh" font-weight="bold" fill="red">F</text>
     <template v-for="disc in weightDiscs">
         <rect :x="(disc.x+40)+'%'" :y="(50-disc.height/2)+'%'" rx="10" ry="10" :width="disc.width+'%'" :height="disc.height+'%'" :style="'fill:'+ disc.color + ';stroke:black;stroke-width:4;opacity:1'" />
     </template>
     </svg>
 </template>
 
-
-
-
 <script>
 export default {
   data() {
     return {
-      weight:0,
-      lifter: {
-        id: 12,
-        lifter_id: 4945,
-        lifts: [
-          {
-            attempt: 1,
-            id: 193,
-            result: 0,
-            weight: 1.0
-          },
-          {
-            attempt: 2,
-            id: 194,
-            result: 0,
-            weight: 0.0
-          },
-          {
-            attempt: 3,
-            id: 195,
-            result: 0,
-            weight: 0.0
-          },
-          {
-            attempt: 4,
-            id: 196,
-            result: 0,
-            weight: 0.0
-          },
-          {
-            attempt: 5,
-            id: 197,
-            result: 0,
-            weight: 0.0
-          },
-          {
-            attempt: 6,
-            id: 198,
-            result: 0,
-            weight: 0.0
-          }
-        ],
-        name: " ",
-        sex: true,
-        sf: 1.0000,
-        team: {
-          id: 1,
-          name: "default",
-          short: ""
-        },
-        weightclass: {
-          id: 4,
-          max_weight: 59.0,
-          min_weight: 55.0,
-          name: "W-59",
-          sex: true
-        }
-      },
+      sex: true,
       discs: [
           {
             weight: 25,
@@ -179,25 +119,40 @@ export default {
     }
   },
   computed: {
+    weight(){
+       try {
+        return this.$store.getters.currentWeight;
+      }
+      catch(e) {
+        console.log(e);
+      }
+      return 0;
+    },
+    sex(){
+       try {
+        return this.$store.getters.sex;
+
+      }
+      catch(e) {
+        console.log(e);
+      }
+      return 0;
+    },
     weightDiscs() {
-        var weight = this.lodash.find(this.lifter.lifts, function(o) { return o.result == 0; }).weight;
-        if (this.lifter.sex == true){
-          return this.weightToDiscs((weight-20)/2,this.discs, 0);
+        if (this.sex == true){
+          return this.weightToDiscs((this.weight-20)/2,this.discs, 0);
         }
         else {
-          return this.weightToDiscs((weight-25)/2,this.discs, 0);
+          return this.weightToDiscs((this.weight-25)/2,this.discs, 0);
         }
         
         
     }
   },
-  mounted: function() {
-    this.loadData();
-  },
   methods: {
       weightToDiscs:function (weight, disc, x){
           if (weight <= 0) {
-            if (disc[0].weight >= 2.5) {
+            if (disc.length > 0 && disc[0].weight >= 2.5) {
               var collar = this.lodash.find (disc, function(o) { return o.type === "collar"; });
               var disc1 = {
                 color: collar.color,
@@ -246,22 +201,6 @@ export default {
                 }
             }
       },
-    loadData: function() {
-      var api =
-        this.source +
-        "api/competitions/" +
-        this.competitionid +
-        "/lifters/current/";
-      this.axios
-        .get(api)
-        .then(response => {
-          this.lifter = response.data;
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-      setTimeout(this.loadData, 5000);
-    }
   }
 };
 </script>

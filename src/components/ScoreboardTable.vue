@@ -189,6 +189,16 @@
   </v-container>
 </template>
 
+  <style scoped>
+>>>.v-data-table th {
+  font-size: 20px;
+}
+
+>>>.v-data-table td {
+  font-size: 20px;
+}
+</style>
+
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
@@ -233,13 +243,26 @@ export default class ScoreboardTable extends Vue {
       width: 200,
       sortable: false
     });
-    this.headers.push({
-      text: "Team",
-      value: "team.short",
-      span: 1,
-      width: 30,
-      sortable: false
-    });
+
+    if (this.type === 'single') {
+      this.headers.push({
+        text: "Team",
+        value: "masterdata.club_single_short",
+        span: 1,
+        width: 30,
+        sortable: false
+      });
+    }
+    else {
+      this.headers.push({
+        text: "Team",
+        value: "team.short",
+        span: 1,
+        width: 30,
+        sortable: false
+      });
+    }
+    
    
 this.headers.push({
       text: "Klasse",
@@ -356,3 +379,4 @@ this.headers.push({
   }
 }
 </script>
+

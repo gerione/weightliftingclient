@@ -1,15 +1,16 @@
 <template>
   <v-container class="grey darken-3">
     <v-row no-gutters>
-      <v-col cols="12" sm="12" md="4" lg="4">
-        <span class="headline font-weight-bold">{{lifter.name}} // {{lifter.masterdata.club_single_short}}</span>
-      </v-col>
-      <v-col cols="12" sm="12" md="3" lg="3" class="mt-1" >
-        <span
+      <v-col cols="12" sm="12" md="12" lg="12">
+        <span v-if="competition.type==='team'" class="headline font-weight-bold">{{lifter.name}} // {{lifter.masterdata.club_team_short}} //</span>
+        <span v-else class="headline font-weight-bold">{{lifter.name}} // {{lifter.masterdata.club_single_short}} //</span>
+        <span v-if="competition.type==='team'"
           class="subtitle-1 font-weight-bold" 
-        >Sinclair: {{lifter.sf}}</span>
+        > Sinclair: {{lifter.sf}}</span>
+        <span v-else
+          class="subtitle-1 font-weight-bold" 
+        > Klasse: {{lifter.weightclass.name}}</span>
       </v-col>
-    </v-row>
     </v-row>
     <v-row no-gutters>
       <template v-for="lift in lifter.lifts.slice(0, 3)">
@@ -119,46 +120,6 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
-interface Weightclass {
-  id: number;
-  max_weight: number;
-  min_weight: number;
-  name: string;
-  sex: boolean;
-}
-interface Team {
-  id: number;
-  name: string;
-  short: string;
-}
-
-interface Lift {
-  attempt: number;
-  id: number;
-  result: number;
-  weight: number;
-}
-
-interface Masterdata {
-  club_single: string;
-  club_single_short: string;
-  club_team: string;
-  club_team_short: string;
-  id: string;
-  name: string;
-  sex: boolean;
-  year: number;
-}
-
-interface Lifter {
-  name: string;
-  sex: boolean;
-  sf: number;
-  lifts: Lift[];
-  team: Team;
-  weightclass: Weightclass;
-  masterdata: Masterdata;
-}
 
 @Component({
   filters: {
@@ -170,40 +131,6 @@ interface Lifter {
 })
 export default class Current extends Vue {
   @Prop() competitionid: number;
-  lifter: Lifter;
-
-  constructor() {
-    super();
-    let team = { id: -1, name: "default", short: "def" };
-    let weightclass = {
-      id: -1,
-      sex: false,
-      min_weight: 1,
-      max_weight: 9999,
-      name: "none"
-    };
-    let attempt = { id: 1, attempt: 1, number: 1, weight: 1, result: 1 };
-    let lifts = [attempt, attempt, attempt, attempt, attempt, attempt];
-    let master = {
-      club_single: "default single",
-      club_single_short: "def",
-      club_team: "default team",
-      club_team_short: "def",
-      id: "XYZ1",
-      name: "Max Muster",
-      sex: false,
-      year: 1900
-    };
-    this.lifter = {
-      name: "default",
-      sex: false,
-      sf: 1.0,
-      team: team,
-      weightclass: weightclass,
-      lifts: lifts,
-      masterdata: master
-    };
-  }
 
   snatch(): number {
     var data = this.lifter.lifts
@@ -236,25 +163,24 @@ export default class Current extends Vue {
     return this.total() * this.lifter.sf;
   }
 
-  mounted() {
-    this.loadData();
+  get competition() {
+    try {
+        return this.$store.getters.currentCompetition;
+      }
+      catch(e) {
+        console.log(e);
+      }
+      return null;
   }
 
-  loadData() {
-    var api =
-      this.source +
-      "api/competitions/" +
-      this.competitionid +
-      "/lifters/current/";
-    this.axios
-      .get(api)
-      .then(response => {
-        this.lifter = response.data;
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-    setTimeout(this.loadData, 5000);
+  get lifter() {
+    try {
+        return this.$store.getters.currentAthlete;
+      }
+      catch(e) {
+        console.log(e);
+      }
+      return null;
   }
 }
 </script>

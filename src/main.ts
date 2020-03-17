@@ -5,7 +5,7 @@ import App from './App.vue';
 import router from './router';
 import Vuetify from 'vuetify';
 
-
+import Vuex from 'vuex';
 
 import 'vuetify/dist/vuetify.min.css';
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
@@ -25,6 +25,9 @@ import Overlay from "./layouts/Overlay.vue";
 import Chartkick from 'vue-chartkick';
 import Chart from 'chart.js';
 
+import store from "./store";
+
+
  
 Vue.component("default-layout", Default);
 Vue.component("overlay-layout", Overlay);
@@ -38,7 +41,7 @@ Vue.use(Chartkick.use(Chart));
 //const server = 'http://localhost:5000';
 const server = "https://weightliftingoverlay.herokuapp.com/";
 
-Vue.use(VueSocketio, io(server));
+//Vue.use(VueSocketio, io(server));
 
 const opts = {theme: {dark: true,}};
 
@@ -58,12 +61,17 @@ Vue.mixin({
 
 const vuetify1 = new Vuetify(opts);
 
+Vue.use(Vuex);
+
+store.dispatch('getLifterAsync')
+store.dispatch('getCompetitionAsync')
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   vuetify : vuetify1,
   router,
+  store,
   components: { App },
   template: '<App/>'
 }).$mount('#app')
