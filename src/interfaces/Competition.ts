@@ -8,4 +8,5 @@ export interface Competition {
   start_time: string;
   youtube_id: string;
   type: string;
+  external_timer: boolean;
 }

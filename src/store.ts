@@ -47,9 +47,37 @@ export const store = new Vuex.Store({
             start_time: "",
             type: "single"
           }, 
-          lifters: {}
+          lifters: {},
+        timer: {
+          running: false,
+          reset: false,
+          time: 120,
+        },
+        referee: {
+          1:0,
+          2:0,
+          3:0,
+        }
     },
     getters: {
+      referee1 : state => {
+        return state.referee["1"];
+      }, 
+      referee2 : state => {
+        return state.referee["2"];
+      }, 
+      referee3 : state => {
+        return state.referee["3"];
+      }, 
+      timerRunning : state => {
+        return state.timer.running;
+      }, 
+      timerReset : state => {
+        return state.timer.reset;
+      }, 
+      timerTime : state => {
+        return state.timer.time;
+      }, 
       currentCompetition: state => {
         return state.competition;
       },
@@ -63,7 +91,11 @@ export const store = new Vuex.Store({
     mutations: {
       setCompetitionId (state, competitionId) {
         // mutate state
+        var message = { competitionid: state.competitionId};
+        this._vm.$socket.client.emit('leave', message);
         state.competitionId = competitionId;
+        message = { competitionid: state.competitionId};
+        this._vm.$socket.client.emit('join', message);
       },
       setLifter (state, lifter) {
           state.currentAthlete = lifter;
@@ -79,7 +111,41 @@ export const store = new Vuex.Store({
       setCompetition(state, competition) {
           state.competition = competition;
           store.dispatch('getCompetitionAsync');
-      }
+      },
+
+      TIMER(state, data) {
+        switch (data.action) {
+          case "start":{
+            state.timer.running = true;
+            break;
+          }
+          case "stop":{
+            state.timer.running = false;
+            break;
+          }
+          case "reset":{
+            state.timer.reset = !state.timer.reset;
+            break;
+          }
+          case "set":{
+            state.timer.time = data.value;
+            break; 
+          }
+        } 
+      },
+
+      REFEREE(state, data) {
+        //0 means that only one referee is present
+        if (data.referee == 0) {
+          state.referee[1] = data.result;
+          state.referee[2] = data.result;
+          state.referee[3] = data.result;
+        }
+        else {
+          state.referee[data.referee] = data.result;
+        }
+        
+      },
     },
     actions: {
       getLifterAsync({ commit, state }){
@@ -91,7 +157,6 @@ export const store = new Vuex.Store({
                 commit ("setLifter",response.data);
             })
             .catch(function(error) {
-                console.log(error);
                 store.dispatch('getLifterAsync');
             });
           }, 1000)
@@ -111,7 +176,13 @@ export const store = new Vuex.Store({
                 });
               }, 1000)
             
-            }
+        },
+        socket_timerMessage ({ dispatch, commit }, data)  {
+          commit('TIMER', data);
+        },
+        socket_refereeMessage ({ dispatch, commit }, data)  {
+          commit('REFEREE', data);
+        }
 
     }
 });

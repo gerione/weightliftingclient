@@ -1,7 +1,7 @@
 <template>
   <v-container class="grey darken-3">
     <v-row no-gutters>
-      <v-col cols="12" sm="12" md="12" lg="12">
+      <v-col cols="10" sm="10" md="10" lg="10">
         <span v-if="competition.type==='team'" class="headline font-weight-bold">{{lifter.name}} // {{lifter.masterdata.club_team_short}} //</span>
         <span v-else class="headline font-weight-bold">{{lifter.name}} // {{lifter.masterdata.club_single_short}} //</span>
         <span v-if="competition.type==='team'"
@@ -10,6 +10,9 @@
         <span v-else
           class="subtitle-1 font-weight-bold" 
         > Klasse: {{lifter.weightclass.name}}</span>
+      </v-col>
+      <v-col cols="2" sm="2" md="2" lg="2" v-if="competition.external_timer == false">
+        <Countdown :competitionid="competitionid"></Countdown>
       </v-col>
     </v-row>
     <v-row no-gutters>
@@ -106,7 +109,7 @@
       <v-col cols="3" sm="3" md="1" lg="1" >
         <v-sheet
           label
-          :width="80"
+         
           color="grey"
           text-color="white"
           class="font-weight-black subheading text-center"
@@ -119,7 +122,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-
+import Countdown from "./countdown/Countdown";
 
 @Component({
   filters: {
@@ -127,6 +130,9 @@ import { Component, Prop } from "vue-property-decorator";
       if (value == null) return 0;
       return value.toFixed(2);
     }
+  },
+  components: {
+    Countdown
   }
 })
 export default class Current extends Vue {

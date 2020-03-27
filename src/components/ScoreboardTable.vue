@@ -354,6 +354,9 @@ this.headers.push({
     var team = this.lodash.find(this.teams, function(o) {
       return o.short === column;
     });
+    if (team == null) {
+      return null;
+    }
     return team.name;
   }
 
@@ -364,6 +367,9 @@ this.headers.push({
     var team = this.lodash.find(this.teams, function(o) {
       return o.short === column;
     });
+    if (team == null){
+      return 0;
+    }
     if (type === "cj") {
       return team.cj;
     } else if (type === "snatch") {

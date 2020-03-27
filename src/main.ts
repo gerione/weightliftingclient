@@ -15,7 +15,7 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import VueLodash from 'vue-lodash';
 
-import VueSocketio from 'vue-socket.io-extended';
+import VueSocketIOExt  from 'vue-socket.io-extended';
 import io from 'socket.io-client';
 
 const options = { name: 'lodash' } // customize the way you want to call it
@@ -38,10 +38,11 @@ Vue.use(Vuetify);
 
 Vue.use(Chartkick.use(Chart));
 
-//const server = 'http://localhost:5000';
+// const server = 'http://localhost:5000';
+// const ioserver = "http://localhost:5000/";
 const server = "https://weightliftingoverlay.herokuapp.com/";
-
-//Vue.use(VueSocketio, io(server));
+const ioserver = "wss://weightliftingoverlay.herokuapp.com/";
+Vue.use(VueSocketIOExt, io(ioserver),{ store });
 
 const opts = {theme: {dark: true,}};
 

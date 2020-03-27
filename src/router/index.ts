@@ -9,6 +9,10 @@ import ScoreboardTable from '@/components/ScoreboardTable.vue'
 import Weight from '@/components/Weight.vue'
 import Countdown from '@/components/countdown/Countdown.vue'
 import CountdownController from '@/components/countdown/CountdownController.vue'
+import RefereeController from '@/components/referee/RefereeController.vue'
+import Referee from '@/components/referee/Referee.vue'
+import Downlamp from '@/components/referee/Downlamp.vue'
+
 import About from '@/components/About.vue'
 import store from "../store";
 
@@ -17,6 +21,7 @@ import store from "../store";
 Vue.use(VueRouter)
 
 export default new VueRouter({
+  mode: 'history',
   routes: [
     {
       name: 'competition',
@@ -73,6 +78,27 @@ export default new VueRouter({
       path: '/competition/:competitionid/timer/controller/',
       props: true,
       component: CountdownController,
+      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
+    },
+    {
+      name: 'referee',
+      path: '/competition/:competitionid/referee/',
+      props: true,
+      component: Referee,
+      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
+    },
+    {
+      name: 'downlamp',
+      path: '/competition/:competitionid/downlamp/',
+      props: true,
+      component: Downlamp,
+      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
+    },
+    {
+      name: 'refereeController',
+      path: '/competition/:competitionid/referee/:referee/controller/',
+      props: true,
+      component: RefereeController,
       beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
     },
     {

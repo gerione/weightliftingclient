@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    
     <v-row>
       <v-col>{{ competition.name }}</v-col>
     </v-row>
@@ -13,7 +14,7 @@
         <TeamStandings v-if="type === 'team'" :competitionid="competitionid" />
       </v-col>
     </v-row>
-
+    
     <v-row>
       <v-col>
         <ScoreboardTable :competitionid="competitionid" :type="type"></ScoreboardTable>
@@ -28,6 +29,7 @@ import TeamStandings from "./TeamStandings";
 import ScoreboardTable from "./ScoreboardTable";
 import Vue from "vue";
 import { Component, Prop, Watch } from "vue-property-decorator";
+import Countdown from "./countdown/Countdown";
 
 interface CompetitionItem {
   id: number;
@@ -42,7 +44,7 @@ interface CompetitionItem {
   components: {
     TeamStandings,
     ScoreboardTable,
-    Current
+    Current,Countdown
   }
 })
 export default class Competition extends Vue {

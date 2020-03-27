@@ -41,6 +41,9 @@
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editedItem.type" label="type"></v-text-field>
                   </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-checkbox v-model="editedItem.external_timer" label="External timer:"></v-checkbox>
+                  </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -72,6 +75,11 @@
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize">Reset</v-btn>
     </template>
+    <template v-slot:item.external_timer="{ item }">
+     <v-icon>
+	    {{ item.external_timer ? "mdi-checkbox-marked" : "mdi-checkbox-blank-outline" }}
+     </v-icon>
+</template>
   </v-data-table>
 
 
@@ -100,8 +108,8 @@ export default class Admin extends Vue  {
 
   constructor(){
     super();
-    this.editedItem = {id: -1, name: "", location: "", start_time: "", youtube_id: "", type: "" };
-    this.defaultItem = {id: -1, name: "", location: "", start_time: "", youtube_id: "", type: "" };
+    this.editedItem = {id: -1, name: "", location: "", start_time: "", youtube_id: "", type: "" , external_timer:true};
+    this.defaultItem = {id: -1, name: "", location: "", start_time: "", youtube_id: "", type: "" , external_timer:true };
     this.competitions = [];
     this.headers = [];
     this.headers.push({text: "Name",align: "left",sortable: true,value: "name"});
@@ -109,7 +117,9 @@ export default class Admin extends Vue  {
     this.headers.push({ text: "Start time",sortable: true, value: "start_time" });
     this.headers.push({ text: "Youtube ID",sortable: true, value: "youtube_id" });
     this.headers.push({ text: "Typ",sortable: true, value: "type" });
+    this.headers.push({ text: "External timer", value: "external_timer", sortable: false });
     this.headers.push({ text: "Actions", value: "action", sortable: false });
+    
   }
 
   get formTitle() {
@@ -172,7 +182,8 @@ export default class Admin extends Vue  {
         location: this.editedItem.location,
         start_time: this.editedItem.start_time,
         youtube_id: this.editedItem.youtube_id,
-        type: this.editedItem.type
+        type: this.editedItem.type,
+        external_timer: this.editedItem.external_timer
       };
       
       var api = source.source() + "api/competitions/";

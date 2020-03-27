@@ -105,7 +105,8 @@ export default class Root extends Vue {
         location: "Test",
         youtube_id: "@test",
         start_time: "TEST1",
-        type: "single"
+        type: "single",
+        external_timer:true
       }
     ];
   }
