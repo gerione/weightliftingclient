@@ -66,6 +66,7 @@ Vue.use(Vuex);
 
 store.dispatch('getLifterAsync')
 store.dispatch('getCompetitionAsync')
+store.dispatch('getLiftersAsync')
 
 /* eslint-disable no-new */
 new Vue({

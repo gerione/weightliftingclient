@@ -1,10 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import { Route, Next } from 'vue-router';
 import Competition from '@/components/Competition.vue'
 import Root from '@/components/Root.vue'
 import Current from '@/components/Current.vue'
 import TeamStandings from '@/components/TeamStandings.vue'
-import Admin from '@/components/Admin.vue'
+import Overlay from '@/components/Overlays.vue'
+
+//Admin
+import Admin from '@/components/admin/Admin.vue'
+import Login from '@/components/admin/Login.vue'
+
 import ScoreboardTable from '@/components/ScoreboardTable.vue'
 import Weight from '@/components/Weight.vue'
 import Countdown from '@/components/countdown/Countdown.vue'
@@ -12,6 +18,7 @@ import CountdownController from '@/components/countdown/CountdownController.vue'
 import RefereeController from '@/components/referee/RefereeController.vue'
 import Referee from '@/components/referee/Referee.vue'
 import Downlamp from '@/components/referee/Downlamp.vue'
+import LiftingOrderTest from '@/components/Lifting/LiftingOrderTest.vue'
 
 import About from '@/components/About.vue'
 import store from "../store";
@@ -34,6 +41,12 @@ export default new VueRouter({
       name: 'home',
       path: '/',
       component: Root
+    },
+    {
+      name: 'overlays',
+      path: '/overlays/:competitionid',
+      props: true,
+      component: Overlay
     },
     {
       name: 'Scoreboard',
@@ -110,7 +123,19 @@ export default new VueRouter({
       name: 'about',
       path: '/about', 
       component: About
-    }
+    },
+    {
+      name: 'LiftingOrderTest',
+      path: '/lifting/:competitionid/', 
+      props: true,
+      component: LiftingOrderTest,
+      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+  }
   ]
 })
 

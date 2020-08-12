@@ -206,7 +206,7 @@ export default class Admin extends Vue  {
          .then(response => {
             this.loadData();
           })
-        .catch(function(error) {
+        .catch(function(error: any ) {
           console.log(error);
         });
       }

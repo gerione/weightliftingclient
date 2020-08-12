@@ -35,7 +35,8 @@
                 display:false
             },
                 ticks: {
-                    fontColor: "white"
+                    fontColor: "white", 
+                    fontSize: 18
                 },
             }],
           xAxes: [{
@@ -43,7 +44,8 @@
                 color: "white",
             },
                 ticks: {
-                    fontColor: "white"
+                    fontColor: "white",
+                    fontSize: 18
                 },
             }]
         }}'></bar-chart>

@@ -77,108 +77,6 @@
                 </template>
               </v-row>
             </template>
-            <template v-slot:item.total="{ item  }">
-              <v-row no-gutters>
-                 <v-col cols="6" sm="6" md="6" lg="6">
-                    <v-sheet
-                      label
-                      :width="50"
-                      color="grey"
-                      text-color="white"
-                      class="font-weight-black subheading text-center"
-                    >{{(item.max_cj + item.max_snatch)}}</v-sheet>
-                  </v-col>
-                  <v-col cols="6" sm="6" md="6" lg="6">
-                    <v-sheet
-                      label
-                      :width="50"
-                      color="grey"
-                      text-color="white"
-                      class="font-weight-black subheading text-center"
-                    >{{(item.cj_points + item.snatch_points) | round}}</v-sheet>
-                  </v-col>
-              </v-row>
-            </template>
-            <template v-if="type === 'team' && $vuetify.breakpoint.smAndUp" v-slot:body.append>
-              <tr>
-                <td colspan="3" rowspan="2">
-                  <span class="headline">{{ long_name(key) }}</span>
-                </td>
-                <td >
-                  <strong>Jugendpunkte</strong>
-                </td>
-                <td class="text-xs-center" :colspan="1">
-                  <v-sheet
-                    label
-                    color="grey"
-                    text-color="white"
-                    :width="70"
-                    class="font-weight-black subheading text-center"
-                  >{{points(key, "snatch_additional_points") | round}}</v-sheet>
-                </td>
-                
-                <td class="text-xs-center">
-                  <v-sheet
-                    label
-                    color="grey"
-                    text-color="white"
-                    :width="70"
-                    class="font-weight-black subheading text-center"
-                  >{{points(key, "cj_additional_points") | round}}</v-sheet>
-                </td>
-                
-                <td class="text-xs-center" >
-                  <v-sheet
-                    label
-                    color="grey"
-                    text-color="white"
-                    :width="70"
-                    class="font-weight-black subheading text-center"
-                  >{{(points(key, "snatch_additional_points") + points(key, "cj_additional_points") ) | round}}</v-sheet>
-                </td>
-              </tr>
-              <tr>
-                <td >
-                  <strong>Summe</strong>
-                </td>
-                <td class="text-xs-center" >
-                  <v-sheet
-                    label
-                    color="grey"
-                    text-color="white"
-                    :width="70"
-                    class="font-weight-black subheading text-center"
-                  >{{points(key, "snatch") | round}}</v-sheet>
-                </td>
-               
-                <td class="text-xs-center" >
-                  <v-sheet
-                    label
-                    color="grey"
-                    text-color="white"
-                    :width="70"
-                    class="font-weight-black subheading text-center"
-                  >{{points(key, "cj") | round}}</v-sheet>
-                </td>
-                
-                <td class="text-xs-center" >
-                  <v-sheet
-                    label
-                    color="grey"
-                    text-color="white"
-                    :width="70"
-                    class="font-weight-black subheading text-center"
-                  >{{points(key, "total") | round}}</v-sheet>
-                </td>
-              </tr>
-            </template>
-            <template v-else-if="type=== 'single' && $vuetify.breakpoint.smAndUp" v-slot:body.append>
-              <tr>
-                <td :colspan="14" rowspan="1">
-                  <span class="headline">{{ key }}</span>
-                </td>
-              </tr>
-            </template>
           </v-data-table>
         </v-col>
       </v-row>
@@ -189,7 +87,7 @@
   </v-container>
 </template>
 
-  <style scoped>
+<style scoped>
 >>>.v-data-table th {
   font-size: 20px;
 }
@@ -200,11 +98,14 @@
 </style>
 
 <script lang="ts">
+
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { Team } from "@/interfaces/Team";
 import { Header } from "@/interfaces/Header";
 
+
+  
 
 export interface Pagination {
   rowsPerPage: number;
@@ -212,23 +113,22 @@ export interface Pagination {
 }
 
 @Component({
-  filters: {
+  filters: { 
     round(value: number) {
       if (value == null) return 0;
       return value.toFixed(2);
     }
   }
 })
+
 export default class ScoreboardTable extends Vue {
   @Prop() competitionid: number;
   @Prop() type: string;
 
-  teams: Team[];
   headers: Header[];
   pagination: Pagination;
   constructor() {
-    super();
-    this.teams = [];
+    super(); 
     this.headers = [];
     this.headers.push({
       text: "Name",
@@ -288,13 +188,6 @@ this.headers.push({
       width: 80,
       sortable: false
     });
-    this.headers.push({
-      text: "Zweikampf",
-      value: "total",
-      span: 4,
-      width: 30,
-      sortable: false
-    });
     this.pagination = { rowsPerPage: -1, sortBy: "weightclass.id" };
   }
 
@@ -306,53 +199,43 @@ this.headers.push({
     const lifters = []; 
     lifters1.forEach(val => lifters.push(Object.assign({}, val)));
 
-    if (this.type === "single") {
-      return { Wettkampf: this.lodash.sortBy(lifters, "weightclass.id") };
-    } else {
-      return this.lodash.groupBy(lifters, "team.short");
-    }
+    var sortedLifters = lifters.sort(function(l1,l2){
+      var openLifts1 = l1.lifts.filter(obj => {
+        return obj.result === 0
+      })
+      var openLifts2 = l2.lifts.filter(obj => {
+        return obj.result === 0
+      })
+      if (openLifts1.length === 0 && openLifts2.length === 0){
+        return -1;  
+      }
+      if (openLifts1.length > 0 && openLifts2.length === 0){
+        return -1;  
+      }
+      if (openLifts1.length === 0 && openLifts2.length > 0){
+        return 1;  
+      }
+      var minAttempt1 = openLifts1.reduce(function(prev, curr) {    
+        return (prev.weight > curr.weight) && (prev.attempt > curr.attempt)? curr : prev;
+      });
+      var minAttempt2 = openLifts2.reduce(function(prev, curr) {    
+        return (prev.weight > curr.weight) && (prev.attempt > curr.attempt)? curr : prev;
+      });
+      
+      if (minAttempt1.weight > minAttempt2.weight) {
+        return 1
+      }
+      else if (minAttempt1.weight < minAttempt2.weight) {
+        return -1
+      }
+      return minAttempt1.attempt > minAttempt2.attempt ? 1 : minAttempt1.attempt < minAttempt2.attempt ? -1 : 0;
+    });
+    
+    return { Wettkampf:sortedLifters};
   }
 
   get computedHeaders () {
-    console.log(this.type);
     return this.headers;
-  }
-  
-  long_name(column) {
-    if (this.teams == null) {
-      return null;
-    }
-    var team = this.lodash.find(this.teams, function(o) {
-      return o.short === column;
-    });
-    if (team == null) {
-      return null;
-    }
-    return team.name;
-  }
-
-  points(column, type: string): number {
-    if (this.teams == null) {
-      return 0;
-    }
-    var team = this.lodash.find(this.teams, function(o) {
-      return o.short === column;
-    });
-    if (team == null){
-      return 0;
-    }
-    if (type === "cj") {
-      return team.cj;
-    } else if (type === "snatch") {
-      return team.snatch;
-    } else if (type === "total") {
-      return team.total;
-    } else if (type === "cj_additional_points") {
-      return team.cj_additional_points;
-    } else if (type === "snatch_additional_points") {
-      return team.snatch_additional_points;
-    }
-    return 0;
   }
 
   get currentLifters() {
@@ -366,3 +249,4 @@ this.headers.push({
   }
 }
 </script>
+

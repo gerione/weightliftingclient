@@ -14,8 +14,11 @@
     </svg>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+
   data() {
     return {
       sex: true,
@@ -119,7 +122,7 @@ export default {
     }
   },
   computed: {
-    weight(){
+    weight() : number{
        try {
         return this.$store.getters.currentWeight;
       }
@@ -128,7 +131,7 @@ export default {
       }
       return 0;
     },
-    sex(){
+    sex(): number {
        try {
         return this.$store.getters.sex;
 
@@ -150,7 +153,7 @@ export default {
     }
   },
   methods: {
-      weightToDiscs:function (weight, disc, x){
+      weightToDiscs:function (weight:number, disc, x){
           if (weight <= 0) {
             if (disc.length > 0 && disc[0].weight >= 2.5) {
               var collar = this.lodash.find (disc, function(o) { return o.type === "collar"; });
@@ -202,5 +205,5 @@ export default {
             }
       },
   }
-};
+});
 </script>

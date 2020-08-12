@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "paths": { "*": ["types/*"] },
     "target": "es6",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "noImplicitReturns": true
   }
-}
+} 
