@@ -29,7 +29,7 @@ Vue.use(VueRouter)
 
 export default new VueRouter({
   mode: 'history',
-  //base: "live",
+  base: process.env.NODE_ENV === 'development' ? '/' : '/live/',
   routes: [
     {
       name: 'competition',
