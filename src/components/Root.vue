@@ -11,7 +11,7 @@
               class="elevation-1"
               v-if="$vuetify.breakpoint.smAndUp"
               sortBy="start_time"
-              sortDesc="true"
+              :sort-desc="true"
             >
               <template v-slot:item.id="{ item }">
                 <v-btn color="green" :to="'competition/' + item.id">
