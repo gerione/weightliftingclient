@@ -282,7 +282,7 @@ this.headers.push({
       sortable: false
     });
     this.headers.push({
-      text: "Stoßen",
+      text: "Stoßen", 
       value: "cj",
       span: 4,
       width: 80,

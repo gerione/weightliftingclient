@@ -10,6 +10,8 @@
               :items="competitions"
               class="elevation-1"
               v-if="$vuetify.breakpoint.smAndUp"
+              sortBy="start_time"
+              sortDesc="true"
             >
               <template v-slot:item.id="{ item }">
                 <v-btn color="green" :to="'competition/' + item.id">
@@ -108,7 +110,7 @@ export default class Root extends Vue {
         id: 1,
         location: "Test",
         youtube_id: "@test",
-        start_time: "TEST1",
+        start_time: "2019-06-14 00:00:00	",
         type: "single",
         external_timer: true,
       },
