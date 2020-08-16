@@ -14,7 +14,7 @@ import Login from '@/components/admin/Login.vue'
 import ScoreboardTable from '@/components/ScoreboardTable.vue'
 import Weight from '@/components/Weight.vue'
 import Countdown from '@/components/countdown/Countdown.vue'
-import CountdownController from '@/components/countdown/CountdownController.vue'
+import CountdownController from '@/components/countdown/CountdownController.vue' 
 import RefereeController from '@/components/referee/RefereeController.vue'
 import Referee from '@/components/referee/Referee.vue'
 import Downlamp from '@/components/referee/Downlamp.vue'
@@ -29,6 +29,7 @@ Vue.use(VueRouter)
 
 export default new VueRouter({
   mode: 'history',
+  //base: "live",
   routes: [
     {
       name: 'competition',

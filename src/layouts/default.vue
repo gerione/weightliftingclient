@@ -24,7 +24,7 @@
     <v-app-bar
        clipped-left
       shrink-on-scroll
-      app
+      app 
     >
       
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -34,9 +34,9 @@
       <v-spacer></v-spacer>
     
     </v-app-bar>
-    <v-content>
-      <slot />
-    </v-content>
+    <v-main>
+      <slot /> 
+    </v-main> 
     
     <v-footer :fixed="fixed" app>
       <span>&copy; Gerald Kettlgruber - SK VÖEST - 2019  </span> 

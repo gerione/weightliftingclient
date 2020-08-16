@@ -5,6 +5,7 @@ declare module 'vue-youtube';
 declare module 'axios';
 declare module 'vue-axios';
 declare module 'vue-lodash';
+declare module 'lodash';
 declare module 'vue-router';
 declare module 'vue-property-decorator';
 declare module 'vue-awesome-countdown';
