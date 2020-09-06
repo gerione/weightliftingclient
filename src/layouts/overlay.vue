@@ -1,10 +1,10 @@
 <template>
 <v-app  style="background: rgba(0,0,0,0);" >
-  <v-content >
+  <v-main >
     <v-container fluid>
       <slot />
     </v-container>
-  </v-content>
+  </v-main>
 </v-app>
 </template>
 

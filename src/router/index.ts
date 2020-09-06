@@ -12,6 +12,8 @@ import Admin from '@/components/admin/Admin.vue'
 import Login from '@/components/admin/Login.vue'
 
 import ScoreboardTable from '@/components/ScoreboardTable.vue'
+import ScoreboardTower from '@/components/ScoreboardTower.vue'
+
 import Weight from '@/components/Weight.vue'
 import Countdown from '@/components/countdown/Countdown.vue'
 import CountdownController from '@/components/countdown/CountdownController.vue' 
@@ -55,6 +57,14 @@ export default new VueRouter({
       props: true,
       meta: { layout: "overlay" },
       component: ScoreboardTable,
+      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
+    },
+    {
+      name: 'Scoretower',
+      path: '/competition/:competitionid/scoreboardtower/:type',
+      props: true,
+      meta: { layout: "overlay" },
+      component: ScoreboardTower,
       beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
     },
     {

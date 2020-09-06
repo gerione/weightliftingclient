@@ -24,6 +24,7 @@ Vue.use(VueLodash, options)
 
 import Default from "./layouts/Default.vue";
 import Overlay from "./layouts/Overlay.vue";
+
 import Chartkick from 'vue-chartkick';
 import Chart from 'chart.js';
 
