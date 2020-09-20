@@ -30,8 +30,8 @@ import store from "../store";
 Vue.use(VueRouter)
 
 export default new VueRouter({
-  mode: 'history',
-  base: process.env.NODE_ENV === 'development' ? '/' : '/live/',
+  //mode: 'history',
+  base: '/',//process.env.NODE_ENV === 'development' ? '/' : '/live/',
   routes: [
     {
       name: 'competition',
