@@ -57,7 +57,8 @@ export const store = new Vuex.Store({
           1:0,
           2:0,
           3:0,
-        }
+        }, 
+        teams: []
     },
     getters: {
       referee1 : state => {
@@ -89,6 +90,9 @@ export const store = new Vuex.Store({
       },
       lifters: state => {
         return state.lifters;
+      }, 
+      teams: state => {
+        return state.teams;
       }
     },
     mutations: {
@@ -119,6 +123,11 @@ export const store = new Vuex.Store({
           state.competition = competition;
           store.dispatch('getCompetitionAsync');
       },
+
+      setTeams(state, teams) {
+        state.teams = teams;
+        store.dispatch('getTeamsAsync');
+    },
 
       TIMER(state, data) {
         switch (data.action) {
@@ -199,6 +208,21 @@ export const store = new Vuex.Store({
             }, 1000)
           
       },
+      getTeamsAsync({ commit, state }){
+        var api =  "https://weightliftingoverlay.herokuapp.com/api/competitions/" + state.competitionId + "/teams/";
+        setTimeout(() => {
+            Vue.axios
+            .get(api)
+            .then(response => {
+                commit ("setTeams",response.data);
+            })
+            .catch(function(error) {
+                console.log(error);
+                store.dispatch('getTeamsAsync');
+            });
+          }, 1000)
+        
+    },
         socket_timerMessage ({ dispatch, commit }, data)  {
           commit('TIMER', data);
         },

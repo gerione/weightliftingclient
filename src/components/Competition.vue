@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    
     <v-row>
       <v-col>{{ competition.name }}</v-col>
     </v-row>
@@ -9,12 +8,11 @@
         <Current :competitionid="competitionid" />
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="type === 'team'">
       <v-col>
-        <TeamStandings v-if="type === 'team'" :competitionid="competitionid" />
+        <TeamStandings  :competitionid="competitionid" />
       </v-col>
     </v-row>
-    
     <v-row>
       <v-col>
         <ScoreboardTable :competitionid="competitionid" :type="type"></ScoreboardTable>

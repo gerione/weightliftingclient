@@ -47,7 +47,19 @@ const server = "https://weightliftingoverlay.herokuapp.com/";
 const ioserver = "wss://weightliftingoverlay.herokuapp.com/";
 Vue.use(VueSocketIOExt, io(ioserver),{ store });
 
-const opts = {theme: {dark: true,}};
+const opts = {
+  theme: {
+    themes: {
+      dark: {
+        graph: '#FFFFFF',
+      },
+      light: {
+        graph: '#FFFFFF',
+      }
+    }
+  }
+};
+
 
 Vue.config.productionTip = false ;
  
@@ -70,6 +82,7 @@ Vue.use(Vuex);
 store.dispatch('getLifterAsync')
 store.dispatch('getCompetitionAsync')
 store.dispatch('getLiftersAsync')
+store.dispatch('getTeamsAsync')
 
 /* eslint-disable no-new */
 new Vue({

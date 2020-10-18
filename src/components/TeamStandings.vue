@@ -1,36 +1,15 @@
 <template>
-  <v-container class="grey darken-3">
-    
-        <v-row align="center" justify="center">
-          
+  <v-container >
+    <v-row align="center" justify="center">  
       <v-col cols="1">Reißen</v-col>
       <v-col cols="2">
         <template v-for='item in this.lodash.sortBy(teams, "snatch_forecast")'>
-          {{item.name}} : {{item.snatch| round}} Pkt.
+          {{item.name}} : {{item.snatch + item.snatch_additional_points| round}} Pkt.
            <v-divider></v-divider>
         </template>
       </v-col>
       <v-col cols="9">
-        <bar-chart :data=chartDataS :colors=chartColorsS style="height: 150px" :library='{ legend: {labels: { fontColor: "white" } }, scales: {
-            yAxes: [{
-              gridLines: {
-                display:false
-            },
-                ticks: {
-                    fontColor: "white", 
-                    fontSize: 0
-                },
-            }],
-          xAxes: [{
-            gridLines: {
-                color: "white",
-            },
-                ticks: {
-                    fontColor: "white",
-                    fontSize: 18
-                },
-            }]
-        }}' ></bar-chart>
+        <bar-chart :data=chartDataS :colors=chartColorsS style="height: 150px" :library=firstLib() ></bar-chart>
       </v-col>
     </v-row>
        <v-row align="center" justify="center">
@@ -38,31 +17,12 @@
       <v-col cols="1">Stoßen</v-col>
       <v-col cols="2">
         <template v-for='item in this.lodash.sortBy(teams, "cj_forecast")'>
-          {{item.name}} : {{item.cj| round}} Pkt.
+          {{item.name}} : {{item.cj + item.cj_additional_points| round}} Pkt.
           <v-divider></v-divider>
         </template>
       </v-col>
       <v-col cols="9">
-        <bar-chart :data=chartDataCJ :colors=chartColorsCJ style="height: 150px" :library='{ legend: {display: false}, scales: {
-            yAxes: [{
-              gridLines: {
-                display:false
-            },
-                ticks: {
-                    fontColor: "white", 
-                    fontSize: 0
-                },
-            }],
-          xAxes: [{
-            gridLines: {
-                color: "white",
-            },
-                ticks: {
-                    fontColor: "white",
-                    fontSize: 18
-                },
-            }]
-        }}'></bar-chart>
+        <bar-chart :data=chartDataCJ :colors=chartColorsCJ style="height: 150px" :library=secondLib()></bar-chart>
       </v-col>
     </v-row>
             <v-row align="center" justify="center">
@@ -70,31 +30,12 @@
       <v-col cols="1">Zweikampf</v-col>
       <v-col cols="2">
         <template v-for='item in this.lodash.sortBy(teams, "total_forecast")'>
-          {{item.name}} : {{item.total| round}} Pkt.
+          {{item.name}} : {{item.total + item.total_additional_points| round}} Pkt.
            <v-divider></v-divider>
         </template>
       </v-col>
       <v-col cols="9">
-        <bar-chart :data=chartDataT :colors=chartColorsT style="height: 150px" :library='{ legend: {display: false}, scales: {
-            yAxes: [{
-              gridLines: {
-                display:false
-            },
-                ticks: {
-                    fontColor: "white", 
-                    fontSize: 0
-                },
-            }],
-          xAxes: [{
-            gridLines: {
-                color: "white",
-            },
-                ticks: {
-                    fontColor: "white",
-                    fontSize: 18
-                },
-            }]
-        }}'></bar-chart>
+        <bar-chart :data=chartDataT :colors=chartColorsT style="height: 150px" :library=secondLib()></bar-chart>
       </v-col>
     </v-row>
   </v-container>
@@ -121,10 +62,10 @@ export default class TeamStandings extends Vue {
   constructor() {
     super();
     this.teams = [];
-    this.chartColors =  ["navy", "MediumBlue 	", "DarkGreen ", "Green", "DarkRed", "Red", "Orange" , "Yellow"];
-    this.chartColorsS =  ["navy", "MediumBlue 	", "DarkGreen ", "Green", "DarkRed", "Red", "Orange" , "Yellow"];
-    this.chartColorsCJ =  ["navy", "MediumBlue 	", "DarkGreen ", "Green", "DarkRed", "Red", "Orange" , "Yellow"];
-    this.chartColorsT =  ["navy", "MediumBlue 	", "DarkGreen ", "Green", "DarkRed", "Red", "Orange" , "Yellow"];
+    this.chartColors =  ["Blue", "Orange 	", "Green ", "Orange", "Red", "Orange", "Yellow" , "Orange"];
+    this.chartColorsS =  Object.assign([], this.chartColors);
+    this.chartColorsCJ =  Object.assign([], this.chartColors);
+    this.chartColorsT =  Object.assign([], this.chartColors);
     this.chartDataS =  [
   {
     name: "SKV", 
@@ -195,10 +136,54 @@ export default class TeamStandings extends Vue {
   },
 ];
   }
-
+  firstLib(){
+    var color = this.$vuetify.theme.dark ? "white" : "black";
+    return { legend: {labels: { fontColor:  color } }, scales: {
+            yAxes: [{
+              gridLines: {
+                display:false
+            },
+                ticks: {
+                    fontColor: color, 
+                    fontSize: 0
+                },
+            }],
+          xAxes: [{
+            gridLines: {
+                color: color,
+            },
+                ticks: {
+                    fontColor: color,
+                    fontSize: 18
+                },
+            }]
+        }};
+  }
+  secondLib(){
+    var color = this.$vuetify.theme.dark ? "white" : "black";
+    return { legend: {display: false}, scales: {
+            yAxes: [{
+              gridLines: {
+                display:false
+            },
+                ticks: {
+                    fontColor: color, 
+                    fontSize: 0
+                },
+            }],
+          xAxes: [{
+            gridLines: {
+                color: color,
+            },
+                ticks: {
+                    fontColor: color,
+                    fontSize: 18
+                },
+            }]
+        }}
+  }
   mounted() {
     this.loadData();
-    //["Stoßen", element.cj_forecast-element.cj], ["Zweikampf", element.total_forecast-element.total]
   }
 
   loadData() {
@@ -225,8 +210,8 @@ export default class TeamStandings extends Vue {
         });
         var teams_temp = this.lodash.sortBy(this.teams, "snatch_forecast")
         teams_temp.forEach(element => {
-          this.chartDataS.push({name: element.name,  data: [["Reißen", element.snatch]], stack: String(i)})
-          this.chartDataS.push({name: element.name + " Hochrechnung",  data: [["Reißen", element.snatch_forecast -  element.snatch]], stack: String(i)})
+          this.chartDataS.push({name: element.name,  data: [["Reißen", element.snatch + element.snatch_additional_points]], stack: String(i)})
+          this.chartDataS.push({name: element.name + " Hochrechnung",  data: [["Reißen", element.snatch_forecast  -  element.snatch]], stack: String(i)})
           this.chartColorsS.push(temp_colors[element.name][0])
           this.chartColorsS.push(temp_colors[element.name][1])
           i = i + 1;
@@ -234,8 +219,8 @@ export default class TeamStandings extends Vue {
 
         var teams_temp = this.lodash.sortBy(this.teams, "cj_forecast")
         teams_temp.forEach(element => {
-          this.chartDataCJ.push({name: element.name,  data: [["Stoßen", element.cj]], stack: String(i)})
-          this.chartDataCJ.push({name: element.name + " Hochrechnung",  data: [["Stoßen", element.cj_forecast-element.cj]], stack: String(i)})
+          this.chartDataCJ.push({name: element.name,  data: [["Stoßen", element.cj + element.cj_additional_points]], stack: String(i)})
+          this.chartDataCJ.push({name: element.name + " Hochrechnung",  data: [["Stoßen", element.cj_forecast  -element.cj]], stack: String(i)})
           this.chartColorsCJ.push(temp_colors[element.name][0])
           this.chartColorsCJ.push(temp_colors[element.name][1])
           i = i + 1;
@@ -243,8 +228,8 @@ export default class TeamStandings extends Vue {
 
         var teams_temp = this.lodash.sortBy(this.teams, "total_forecast")
         teams_temp.forEach(element => {
-          this.chartDataT.push({name: element.name,  data: [["Zweikampf", element.total]], stack: String(i)})
-          this.chartDataT.push({name: element.name + " Hochrechnung",  data: [["Zweikampf", element.total_forecast-element.total]], stack: String(i)})
+          this.chartDataT.push({name: element.name,  data: [["Zweikampf", element.total + element.total_additional_points]], stack: String(i)})
+          this.chartDataT.push({name: element.name + " Hochrechnung",  data: [["Zweikampf", element.total_forecast -element.total]], stack: String(i)})
           this.chartColorsT.push(temp_colors[element.name][0])
           this.chartColorsT.push(temp_colors[element.name][1])
           i = i + 1;
