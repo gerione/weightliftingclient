@@ -173,6 +173,27 @@ export default class ScoreboardTable extends Vue {
   constructor() {
     super();
     this.headers = [];
+    
+    this.pagination = { rowsPerPage: -1, sortBy: "weightclass.id" };
+  }
+
+  groups(lifters1) {
+    
+    if (lifters1 == null || lifters1.length == 0 || lifters1.length === undefined) {
+      return null;
+    }
+    const lifters = []; 
+    lifters1.forEach(val => lifters.push(Object.assign({}, val)));
+
+    if (this.type === "single") {
+      return { Wettkampf: this.lodash.sortBy(lifters, "weightclass.id") };
+    } else {
+      return this.lodash.groupBy(lifters, "team.short");
+    }
+  }
+
+  get computedHeaders () {
+    this.headers = []
     this.headers.push({
       text: "Name",
       align: "left",
@@ -239,26 +260,6 @@ export default class ScoreboardTable extends Vue {
       width: 30,
       sortable: false
     });
-    this.pagination = { rowsPerPage: -1, sortBy: "weightclass.id" };
-  }
-
-  groups(lifters1) {
-    
-    if (lifters1 == null || lifters1.length == 0 || lifters1.length === undefined) {
-      return null;
-    }
-    const lifters = []; 
-    lifters1.forEach(val => lifters.push(Object.assign({}, val)));
-
-    if (this.type === "single") {
-      return { Wettkampf: this.lodash.sortBy(lifters, "weightclass.id") };
-    } else {
-      return this.lodash.groupBy(lifters, "team.short");
-    }
-  }
-
-  get computedHeaders () {
-    console.log(this.type);
     return this.headers;
   }
   

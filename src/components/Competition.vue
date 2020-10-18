@@ -1,21 +1,21 @@
 <template>
   <v-container>
     <v-row>
-      <v-col>{{ competition.name }}</v-col>
+      <v-col>{{ name(currentComp) }}</v-col>
     </v-row>
     <v-row>
       <v-col>
-        <Current :competitionid="competitionid" />
+        <Current :competitionid="id(currentComp)" />
       </v-col>
     </v-row>
     <v-row v-if="type === 'team'">
       <v-col>
-        <TeamStandings  :competitionid="competitionid" />
+        <TeamStandings  :competitionid="id(currentComp)" />
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <ScoreboardTable :competitionid="competitionid" :type="type"></ScoreboardTable>
+        <ScoreboardTable :competitionid="id(currentComp)" :type="type(currentComp)"></ScoreboardTable>
       </v-col>
     </v-row>
   </v-container>
@@ -29,15 +29,6 @@ import Vue from "vue";
 import { Component, Prop, Watch } from "vue-property-decorator";
 import Countdown from "./countdown/Countdown";
 
-interface CompetitionItem {
-  id: number;
-  name: string;
-  location?: string;
-  start_time?: string;
-  youtube_id?: string;
-  type?: string;
-}
-
 @Component({
   components: {
     TeamStandings,
@@ -46,26 +37,36 @@ interface CompetitionItem {
   }
 })
 export default class Competition extends Vue {
-  @Prop() competitionid: number;
-  type: string = "single";
-  competition: CompetitionItem = { id: -1, name: "default" };
 
-  @Watch("$route", { immediate: true, deep: true })
-  onUrlChange(newVal: any) {
-    this.loadCompInfo();
+ 
+  name (comp){
+    if (comp == null){
+      return " ";
+    }
+    return comp.name;
   }
-  mounted() {
-    this.loadCompInfo();
+  type (comp){
+    if (comp == null){
+      return " ";
+    }
+    return comp.type;
   }
 
-  loadCompInfo() {
-    var api = this.source + "api/competitions/" + this.competitionid + "/";
+  id (comp){
+    if (comp == null){
+      return " ";
+    }
+    return comp.id;
+  }
 
-    this.axios.get(api).then(response => {
-      this.competition = response.data.competition;
-      this.type = response.data.competition.type;
-      console.log("route changed" + this.type);
-    });
+  get currentComp() {
+    try {
+        return this.$store.getters.currentCompetition;
+      }
+      catch(e) {
+        console.log(e);
+      }
+      return null;
   }
 }
 </script>

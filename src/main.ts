@@ -47,23 +47,8 @@ const server = "https://weightliftingoverlay.herokuapp.com/";
 const ioserver = "wss://weightliftingoverlay.herokuapp.com/";
 Vue.use(VueSocketIOExt, io(ioserver),{ store });
 
-const opts = {
-  theme: {
-    themes: {
-      dark: {
-        graph: '#FFFFFF',
-      },
-      light: {
-        graph: '#FFFFFF',
-      }
-    }
-  }
-};
-
 
 Vue.config.productionTip = false ;
- 
-
 
 Vue.mixin({
   data: function() {
@@ -75,7 +60,7 @@ Vue.mixin({
   }
 });
 
-const vuetify1 = new Vuetify(opts);
+const vuetify1 = new Vuetify();
 
 Vue.use(Vuex);
 
