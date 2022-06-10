@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <template v-for="(liftersa, key) in groups(currentLifters)">
       <v-row>
         <v-col>
@@ -10,6 +10,7 @@
             hide-default-footer
             must-sort
             disable-pagination
+            dense
           >
             <template v-slot:no-data>
               <v-alert :value="true" color="success" type="success">Wettkampf wird geladen!</v-alert>

@@ -140,10 +140,12 @@ export const store = new Vuex.Store({
             break;
           }
           case "reset":{
+            state.timer.running = false;
             state.timer.reset = !state.timer.reset;
             break;
           }
           case "set":{
+            state.timer.running = false;
             state.timer.time = data.value;
             break; 
           }

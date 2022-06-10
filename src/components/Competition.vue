@@ -8,7 +8,8 @@
         <Current :competitionid="id(currentComp)" />
       </v-col>
     </v-row>
-    <v-row v-if="type === 'team'">
+  
+    <v-row v-if="type(currentComp) === 'team'">
       <v-col>
         <TeamStandings  :competitionid="id(currentComp)" />
       </v-col>
@@ -56,11 +57,13 @@ export default class Competition extends Vue {
     if (comp == null){
       return " ";
     }
+    
     return comp.id;
   }
 
   get currentComp() {
     try {
+      
         return this.$store.getters.currentCompetition;
       }
       catch(e) {

@@ -2,10 +2,10 @@
   <v-container class="grey darken-3">
     <v-row no-gutters>
       <v-col cols="10" sm="10" md="10" lg="10">
-        <span v-if="competition.type==='team'" class="headline font-weight-bold">{{lifter.name}} // {{lifter.masterdata.club_team_short}} //</span>
-        <span v-else class="headline font-weight-bold">{{lifter.name}} // {{lifter.masterdata.club_single_short}} //</span>
+        <span v-if="competition.type==='team'" class="h3 white--text font-weight-bold">{{lifter.name}} // {{lifter.masterdata.club_team_short}} //</span>
+        <span v-else class="h3 white--text  font-weight-bold">{{lifter.name}} // {{lifter.masterdata.club_single_short}} //</span>
         <span v-if="competition.type==='team'"
-          class="subtitle-1 font-weight-bold" 
+          class="subtitle-1 white--text  font-weight-bold" 
         > Sinclair: {{lifter.sf}}</span>
         <span v-else
           class="subtitle-1 font-weight-bold" 
@@ -23,24 +23,21 @@
             v-if="lift.result === 2"
             :width="50"
             color="green"
-            text-color="white"
-            class="font-weight-black subheading text-center"
+            class="white--text font-weight-black subheading text-center"
           >{{lift.weight}}</v-sheet>
           <v-sheet
             label
             v-else-if="lift.result === 1"
             :width="50"
             color="red"
-            text-color="white"
-            class="font-weight-black subheading text-center"
+             class="white--text font-weight-black subheading text-center"
           >{{lift.weight}}</v-sheet>
           <v-sheet
             label
             v-else-if="lift.result === 0"
             :width="50"
             color="black"
-            text-color="white"
-            class="font-weight-black subheading text-center"
+             class="white--text font-weight-black subheading text-center"
           >{{lift.weight}}</v-sheet>
         </v-col>
       </template>
@@ -51,8 +48,7 @@
           label
           :width="80"
           color="grey"
-          text-color="white"
-          class="font-weight-black subheading text-center"
+          class="white--text font-weight-black subheading text-center"
         >{{this.snatch() * this.lifter.sf | round }}</v-sheet>
       </v-col>
 
@@ -64,24 +60,21 @@
             v-if="lift.result === 2"
             :width="50"
             color="green"
-            text-color="white"
-            class="font-weight-black subheading text-center"
+             class="white--text font-weight-black subheading text-center"
           >{{lift.weight}}</v-sheet>
           <v-sheet
             label
             v-else-if="lift.result === 1"
             :width="50"
             color="red"
-            text-color="white"
-            class="font-weight-black subheading text-center"
+             class="white--text font-weight-black subheading text-center"
           >{{lift.weight}}</v-sheet>
           <v-sheet
             label
             v-else-if="lift.result === 0"
             :width="50"
             color="black"
-            text-color="white"
-            class="font-weight-black subheading text-center"
+             class="white--text font-weight-black subheading text-center"
           >{{lift.weight}}</v-sheet>
         </v-col>
       </template>
@@ -91,8 +84,7 @@
           label
           :width="80"
           color="grey"
-          text-color="white"
-          class="font-weight-black subheading text-center"
+           class="white--text font-weight-black subheading text-center"
         >{{this.cj() * this.lifter.sf | round }}</v-sheet>
       </v-col>
       
@@ -102,8 +94,7 @@
           label
           :width="50"
           color="grey"
-          text-color="white"
-          class="font-weight-black subheading text-center"
+           class="white--text font-weight-black subheading text-center"
         >{{this.total()}}</v-sheet>
       </v-col>
       <v-col cols="3" sm="3" md="1" lg="1" >
@@ -111,8 +102,7 @@
           label
          
           color="grey"
-          text-color="white"
-          class="font-weight-black subheading text-center"
+           class="white--text font-weight-black subheading text-center"
         >{{this.points() | round}}</v-sheet>
       </v-col>
     </v-row>

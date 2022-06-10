@@ -38,7 +38,7 @@
     "vue-socket.io-extended": "^4.0.4",
     "vue-ts-plugin": "^0.1.0",
     "vue-youtube": "^1.4.0",
-    "vuetify": "^2.3.8",
+    "vuetify": "^2.4.8",
     "vuex": "^3.5.1",
     "webpack-cli": "^3.3.12"
   },

@@ -11,14 +11,18 @@
             hide-default-footer
             dark
             must-sort
+            dense
+            :custom-sort="customSort"
           >
             <template v-slot:no-data>
-              <v-alert :value="true" color="success" type="success">Wettkampf wird geladen!</v-alert>
+              <v-alert :value="true" color="success" type="success"
+                >Wettkampf wird geladen!</v-alert
+              >
             </template>
 
-            <template v-slot:item.snatch="{ item  }">
-               <v-row no-gutters>
-                <template v-for="lift in item.lifts.slice(0,3)">
+            <template v-slot:item.snatch="{ item }">
+              <v-row no-gutters>
+                <template v-for="lift in item.lifts.slice(0, 3)">
                   <v-col cols="4" sm="4" md="4" lg="4">
                     <v-sheet
                       label
@@ -26,28 +30,31 @@
                       height="20"
                       width="15"
                       color="green"
-                    > </v-sheet>
+                    >
+                    </v-sheet>
                     <v-sheet
                       label
                       v-else-if="lift.result === 1"
                       height="20"
                       width="15"
                       color="red"
-                    > </v-sheet>
+                    >
+                    </v-sheet>
                     <v-sheet
                       label
                       v-else-if="lift.result === 0"
                       height="20"
                       width="15"
                       color="white"
-                    > </v-sheet>
+                    >
+                    </v-sheet>
                   </v-col>
                 </template>
-               </v-row>
+              </v-row>
             </template>
-            <template v-slot:item.cj="{ item  }">
+            <template v-slot:item.cj="{ item }">
               <v-row no-gutters>
-                <template v-for="lift in item.lifts.slice(3,6)">
+                <template v-for="lift in item.lifts.slice(3, 6)">
                   <v-col cols="4" sm="4" md="4" lg="4">
                     <v-sheet
                       label
@@ -56,21 +63,24 @@
                       height="20"
                       width="10"
                       color="green"
-                    > </v-sheet>
+                    >
+                    </v-sheet>
                     <v-sheet
                       label
                       v-else-if="lift.result === 1"
                       height="20"
                       width="10"
                       color="red"
-                    > </v-sheet>
+                    >
+                    </v-sheet>
                     <v-sheet
                       label
                       v-else-if="lift.result === 0"
                       height="20"
                       width="10"
                       color="white"
-                    > </v-sheet>
+                    >
+                    </v-sheet>
                   </v-col>
                 </template>
               </v-row>
@@ -78,50 +88,48 @@
 
             <template v-slot:item.best="{ item }">
               <v-row no-gutters>
-                 <v-col cols="4" sm="4" md="4" lg="4">
-                    <v-sheet
-                      label
-                      :width="40"
-                      height="20"
-                      color="grey"
-                      text-color="white"
-                      class="font-weight-black subheading text-center"
-                    >{{best(item)}}</v-sheet>
-                    </v-col>
+                <v-col cols="4" sm="4" md="4" lg="4">
+                  <v-sheet
+                    label
+                    :width="40"
+                    height="20"
+                    color="grey"
+                    text-color="white"
+                    class="font-weight-black subheading text-center"
+                    >{{ best(item) }}</v-sheet
+                  >
+                </v-col>
               </v-row>
             </template>
 
             <template v-slot:item.next="{ item }">
               <v-row no-gutters>
-                 <v-col cols="4" sm="4" md="4" lg="4">
-                    <v-sheet
-                      label
-                      :width="40"
-                      height="20"
-                      color="grey"
-                      text-color="white"
-                      class="font-weight-black subheading text-center"
-                    >{{next(item)}}</v-sheet>
-                    </v-col>
+                <v-col cols="4" sm="4" md="4" lg="4">
+                  <v-sheet
+                    label
+                    :width="40"
+                    height="20"
+                    color="grey"
+                    text-color="white"
+                    class="font-weight-black subheading text-center"
+                    >{{ next(item) }}</v-sheet
+                  >
+                </v-col>
               </v-row>
             </template>
-
           </v-data-table>
         </v-col>
-      </v-row>
-      <v-row>
-        <v-col></v-col>
       </v-row>
     </template>
   </v-container>
 </template>
 
   <style scoped>
->>>.v-data-table th {
+>>> .v-data-table th {
   font-size: 20px;
 }
 
->>>.v-data-table td {
+>>> .v-data-table td {
   font-size: 20px;
 }
 </style>
@@ -131,7 +139,6 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { Team } from "@/interfaces/Team";
 import { Header } from "@/interfaces/Header";
-
 
 export interface Pagination {
   rowsPerPage: number;
@@ -143,8 +150,8 @@ export interface Pagination {
     round(value: number) {
       if (value == null) return 0;
       return value.toFixed(2);
-    }
-  }
+    },
+  },
 })
 export default class ScoreboardTable extends Vue {
   @Prop() competitionid: number;
@@ -162,105 +169,170 @@ export default class ScoreboardTable extends Vue {
       align: "left",
       value: "name",
       span: 1,
-      width: 100,
-      sortable: false
+      width: 200,
+      sortable: false,
     });
 
-    if (this.type === 'single') {
-      this.headers.push({
-        text: "Team",
-        value: "masterdata.club_single_short",
-        span: 1,
-        width: 30,
-        sortable: false
-      });
-    }
-    else {
-      this.headers.push({
-        text: "Team",
-        value: "team.short",
-        span: 1,
-        width: 20,
-        sortable: false
-      });
-    }
-  
     this.headers.push({
       text: "R",
       value: "snatch",
       span: 4,
-      width: 50,
-      sortable: false
+      width: 20,
+      sortable: false,
     });
     this.headers.push({
-      text: "Stoßen", 
+      text: "Stoßen",
       value: "cj",
       span: 4,
       width: 20,
-      sortable: false
+      sortable: false,
     });
     this.headers.push({
-      text: "Best", 
+      text: "Best",
       value: "best",
       span: 4,
       width: 20,
-      sortable: false
+      sortable: false,
     });
     this.headers.push({
-      text: "Next", 
+      text: "Next",
       value: "next",
       span: 4,
       width: 20,
-      sortable: false
+      sortable: false,
     });
-    this.pagination = { rowsPerPage: -1, sortBy: "weightclass.id" };
+    this.pagination = { rowsPerPage: -1, sortBy: "max_snatch" };
   }
 
-  next (lifter) {
-    var data = lifter.lifts.slice(0, 3)
-            .filter(lift => lift.result === 0)
-            .map(lift => lift.weight);
+  ranking_sn(lifter) {
+    // TODO: ADD Startnumber
+    return lifter.max_snatch * 10e12 +
+        (lifter.lifts[2].result == 2 &&
+        lifter.lifts[2].weight >= lifter.lifts[1].weight
+          ? 3
+          : lifter.lifts[1].result == 2 &&
+            lifter.lifts[1].weight >= lifter.lifts[0].weight
+          ? 2
+          : lifter.lifts[0].result == 2 && lifter.lifts[0].weight > 1
+          ? 1
+          : 0) *
+          10e10 +
+        // Delta between third  and second attempt (set 0 if no valid third)
+        (lifter.lifts[2].result == 2
+          ? (lifter.lifts[2].weight - lifter.lifts[1].weight) * 10e7
+          : 0) +
+        // Delta between first and second attempt
+        (lifter.lifts[1].result == 2
+          ? (lifter.lifts[1].weight - lifter.lifts[0].weight) * 10e4
+          : 0) +
+        // Startnumber
+        1 * 10e2;
+
+  }
+
+   ranking_cj(lifter) {
+    // TODO: ADD Startnumber
+    return lifter.max_snatch * 10e12 +
+        (lifter.lifts[5].result == 2 &&
+        lifter.lifts[5].weight >= lifter.lifts[4].weight
+          ? 3
+          : lifter.lifts[4].result == 2 &&
+            lifter.lifts[4].weight >= lifter.lifts[3].weight
+          ? 2
+          : lifter.lifts[3].result == 2 && lifter.lifts[0].weight > 1
+          ? 1
+          : 0) *
+          10e10 +
+        // Delta between third  and second attempt (set 0 if no valid third)
+        (lifter.lifts[5].result == 2
+          ? (lifter.lifts[5].weight - lifter.lifts[4].weight) * 10e7
+          : 0) +
+        // Delta between first and second attempt
+        (lifter.lifts[4].result == 2
+          ? (lifter.lifts[4].weight - lifter.lifts[3].weight) * 10e4
+          : 0) +
+        // Startnumber
+        1 * 10e2;
+
+  }
+
+
+
+  customSort(items, index, isDesc) {
+     var data = this.currentLifters.filter(function (lifter) {
+      return (
+        lifter.lifts
+          .slice(0, 3)
+          .filter((lift) => lift.result === 0)
+          .map((lift) => lift.weight).length > 0
+      );
+    });
+
+    if (data.length === 0) {
+      items.sort((a, b) => {
+      return this.ranking_cj(b) < this.ranking_cj(a)  ? -1 : 1;
+    });
+    } else {
+      items.sort((a, b) => {
+      return this.ranking_sn(b) < this.ranking_sn(a)  ? -1 : 1;
+    });
+    }
+    return items;
+  }
+
+  next(lifter) {
+    var data = lifter.lifts
+      .slice(0, 3)
+      .filter((lift) => lift.result === 0)
+      .map((lift) => lift.weight);
     var min = 9999;
-    if (data.length > 0){
-      min = data[0]
+    if (data.length > 0) {
+      min = data[0];
       if (min == 0) {
-         var data = 
-           lifter.lifts.slice(0, 3)
-              .filter(lift => lift.result === 0)
-              .map(lift => lift.weight);
-      
-          if (data.length === 0){
-            min = lifter.max_cj + 1
-          }
-          else {
-            min = lifter.max_snatch + 1
-          }
-      }
-    }
-    return min;
+        var data = lifter.lifts
+          .slice(0, 3)
+          .filter((lift) => lift.result === 0)
+          .map((lift) => lift.weight);
 
+        if (data.length === 0) {
+          min = lifter.max_cj + 1;
+        } else {
+          min = lifter.max_snatch + 1;
+        }
+      }
+      return min;
+    }
+    return " ";
   }
 
-  best (lifter) {
-    var data = lifter.lifts.slice(0, 3)
-              .filter(lift => lift.result === 0)
-              .map(lift => lift.weight);
-      
-    if (data.length === 0){
-      return lifter.max_cj 
-    }
-    else {
-      return lifter.max_snatch 
+  best(lifter): any {
+    var data = this.currentLifters.filter(function (lifter) {
+      return (
+        lifter.lifts
+          .slice(0, 3)
+          .filter((lift) => lift.result === 0)
+          .map((lift) => lift.weight).length > 0
+      );
+    });
+
+    if (data.length === 0) {
+      return lifter.max_cj;
+    } else {
+      return lifter.max_snatch;
     }
   }
 
   get groups() {
-    var lifters1 = this.currentLifters
-    if (lifters1 == null || lifters1.length == 0 || lifters1.length === undefined) {
+    var lifters1 = this.currentLifters;
+    if (
+      lifters1 == null ||
+      lifters1.length == 0 ||
+      lifters1.length === undefined
+    ) {
       return null;
     }
-    const lifters = []; 
-    lifters1.forEach(val => lifters.push(Object.assign({}, val)));
+    const lifters = [];
+    lifters1.forEach((val) => lifters.push(Object.assign({}, val)));
 
     if (this.type === "single") {
       return { Wettkampf: this.lodash.sortBy(lifters, "weightclass.id") };
@@ -269,67 +341,33 @@ export default class ScoreboardTable extends Vue {
     }
   }
 
-  get computedHeaders () {
-    var data = this.lodash.map(this.$store.getters.lifters,
-      function(lifter) {
-          return lifter.lifts.slice(0, 3)
-              .filter(lift => lift.result === 0)
-              .map(lift => lift.weight);
-      }).filter(function(sub) {
+  get computedHeaders() {
+    var data = this.lodash
+      .map(this.$store.getters.lifters, function (lifter) {
+        return lifter.lifts
+          .slice(0, 3)
+          .filter((lift) => lift.result === 0)
+          .map((lift) => lift.weight);
+      })
+      .filter(function (sub) {
         return sub.length;
       });
-      
-    if (data.length > 0){
-      var newheaders = this.lodash.filter(this.headers, function(n) { return n.text !== "Stoßen";})
+
+    if (data.length > 0) {
+      var newheaders = this.lodash.filter(this.headers, function (n) {
+        return n.text !== "Stoßen";
+      });
     }
     return newheaders;
-  }
-  
-  long_name(column) {
-    if (this.teams == null) {
-      return null;
-    }
-    var team = this.lodash.find(this.teams, function(o) {
-      return o.short === column;
-    });
-    if (team == null) {
-      return null;
-    }
-    return team.name;
-  }
-
-  points(column, type: string): number {
-    if (this.teams == null) {
-      return 0;
-    }
-    var team = this.lodash.find(this.teams, function(o) {
-      return o.short === column;
-    });
-    if (team == null){
-      return 0;
-    }
-    if (type === "cj") {
-      return team.cj;
-    } else if (type === "snatch") {
-      return team.snatch;
-    } else if (type === "total") {
-      return team.total;
-    } else if (type === "cj_additional_points") {
-      return team.cj_additional_points;
-    } else if (type === "snatch_additional_points") {
-      return team.snatch_additional_points;
-    }
-    return 0;
   }
 
   get currentLifters() {
     try {
-        return this.$store.getters.lifters;
-      }
-      catch(e) {
-        console.log(e);
-      }
-      return null;
+      return this.$store.getters.lifters;
+    } catch (e) {
+      console.log(e);
+    }
+    return null;
   }
 }
 </script>

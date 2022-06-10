@@ -39,7 +39,7 @@
     </v-main> 
     
     <v-footer :fixed="fixed" app>
-      <span>&copy; Gerald Kettlgruber - SK VÖEST - 2020  </span> 
+      <span>&copy; Gerald Kettlgruber - SK VÖEST - 2021  </span> 
     </v-footer>
   </v-app>
 </template>
