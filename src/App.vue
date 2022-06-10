@@ -1,17 +1,11 @@
 <template>
-  <component :is="layout">
-    <router-view />
-  </component>
+  <router-view />
 </template>
 
-<script>
-const default_layout = "default";
+<script lang="ts">
+import { defineComponent } from 'vue';
 
-export default {
-    computed: {
-    layout() {
-      return (this.$route.meta.layout || default_layout) + "-layout";
-    }
-  }
-};
+export default defineComponent({
+  name: 'App',
+});
 </script>

@@ -1,59 +1,36 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Competition from '@/components/Competition.vue'
-import Root from '@/components/Root.vue'
-import Current from '@/components/Current.vue'
-import TeamStandings from '@/components/TeamStandings.vue'
-import Admin from '@/components/Admin.vue'
-import ScoreboardTable from '@/components/ScoreboardTable.vue'
-import Weight from '@/components/Weight.vue'
+import { route } from 'quasar/wrappers';
+import {
+  createMemoryHistory,
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+} from 'vue-router';
 
-Vue.use(VueRouter)
+import routes from './routes';
 
-export default new VueRouter({
-  routes: [
-    {
-      name: 'competition',
-      path: '/competition/:competitionid', 
-      props: true,
-      component: Competition
-    },
-    {
-      name: 'home',
-      path: '/',
-      component: Root
-    },
-    {
-      name: 'Scoreboard',
-      path: '/scoreboard/:competitionid/:type',
-      props: true,
-      meta: { layout: "overlay" },
-      component: ScoreboardTable
-    },
-    {
-      name: 'current', 
-      path: '/current/:competitionid',
-      meta: { layout: "overlay" },
-      props: true,
-      component: Current
-    },
-    {
-      name: 'teamstandings',
-      path: '/team/:competitionid',
-      meta: { layout: "overlay" },
-      props: true,
-      component: TeamStandings
-    },
-    {
-      name: 'weight',
-      path: '/weight/:competitionid',
-      props: true,
-      component: Weight
-    },
-    {
-      name: 'admin',
-      path: '/admin', 
-      component: Admin
-    },
-  ]
-})
+/*
+ * If not building with SSR mode, you can
+ * directly export the Router instantiation;
+ *
+ * The function below can be async too; either use
+ * async/await or return a Promise which resolves
+ * with the Router instance.
+ */
+
+export default route(function (/* { store, ssrContext } */) {
+  const createHistory = process.env.SERVER
+    ? createMemoryHistory
+    : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory);
+
+  const Router = createRouter({
+    scrollBehavior: () => ({ left: 0, top: 0 }),
+    routes,
+
+    // Leave this as is and make changes in quasar.conf.js instead!
+    // quasar.conf.js -> build -> vueRouterMode
+    // quasar.conf.js -> build -> publicPath
+    history: createHistory(process.env.VUE_ROUTER_BASE),
+  });
+
+  return Router;
+});
