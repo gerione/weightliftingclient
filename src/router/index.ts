@@ -5,6 +5,7 @@ import Competition from '@/components/Competition.vue'
 import Root from '@/components/Root.vue'
 import Current from '@/components/Current.vue'
 import TeamStandings from '@/components/TeamStandings.vue'
+import TeamStandingsBeamer from '@/components/TeamStandingsBeamer.vue'
 import Overlay from '@/components/Overlays.vue'
 
 //Admin
@@ -16,7 +17,7 @@ import ScoreboardTower from '@/components/ScoreboardTower.vue'
 
 import Weight from '@/components/Weight.vue'
 import Countdown from '@/components/countdown/Countdown.vue'
-import CountdownController from '@/components/countdown/CountdownController.vue' 
+import CountdownController from '@/components/countdown/CountdownController.vue'
 import RefereeController from '@/components/referee/RefereeController.vue'
 import Referee from '@/components/referee/Referee.vue'
 import Downlamp from '@/components/referee/Downlamp.vue'
@@ -35,7 +36,7 @@ export default new VueRouter({
   routes: [
     {
       name: 'competition',
-      path: '/competition/:competitionid', 
+      path: '/competition/:competitionid',
       props: true,
       component: Competition,
       beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
@@ -68,7 +69,7 @@ export default new VueRouter({
       beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
     },
     {
-      name: 'current', 
+      name: 'current',
       path: '/competition/:competitionid/current/',
       meta: { layout: "overlay" },
       props: true,
@@ -81,6 +82,14 @@ export default new VueRouter({
       meta: { layout: "overlay" },
       props: true,
       component: TeamStandings,
+      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
+    },
+    {
+      name: 'teamstandingsbeamer',
+      path: '/competition/:competitionid/:type/beamer',
+      meta: { layout: "overlay" },
+      props: true,
+      component: TeamStandingsBeamer,
       beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
     },
     {
@@ -127,17 +136,17 @@ export default new VueRouter({
     },
     {
       name: 'admin',
-      path: '/admin', 
+      path: '/admin',
       component: Admin
     },
     {
       name: 'about',
-      path: '/about', 
+      path: '/about',
       component: About
     },
     {
       name: 'LiftingOrderTest',
-      path: '/lifting/:competitionid/', 
+      path: '/lifting/:competitionid/',
       props: true,
       component: LiftingOrderTest,
       beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
