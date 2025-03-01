@@ -1,9 +1,3 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": { "*": ["types/*"] },
-    "target": "es6",
-    "experimentalDecorators": true,
-    "noImplicitReturns": true
-  }
-} 
+  "extends": "./.quasar/tsconfig.json"
+}

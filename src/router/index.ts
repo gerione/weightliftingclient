@@ -1,161 +1,35 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import { Route, Next } from 'vue-router';
-import Competition from '@/components/Competition.vue'
-import Root from '@/components/Root.vue'
-import Current from '@/components/Current.vue'
-import TeamStandings from '@/components/TeamStandings.vue'
-import TeamStandingsBeamer from '@/components/TeamStandingsBeamer.vue'
-import Overlay from '@/components/Overlays.vue'
+import { route } from 'quasar/wrappers';
+import {
+  createMemoryHistory,
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+} from 'vue-router';
+import routes from './routes';
 
-//Admin
-import Admin from '@/components/admin/Admin.vue'
-import Login from '@/components/admin/Login.vue'
+/*
+ * If not building with SSR mode, you can
+ * directly export the Router instantiation;
+ *
+ * The function below can be async too; either use
+ * async/await or return a Promise which resolves
+ * with the Router instance.
+ */
 
-import ScoreboardTable from '@/components/ScoreboardTable.vue'
-import ScoreboardTower from '@/components/ScoreboardTower.vue'
+export default route(function (/* { store, ssrContext } */) {
+  const createHistory = process.env.SERVER
+    ? createMemoryHistory
+    : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory);
 
-import Weight from '@/components/Weight.vue'
-import Countdown from '@/components/countdown/Countdown.vue'
-import CountdownController from '@/components/countdown/CountdownController.vue'
-import RefereeController from '@/components/referee/RefereeController.vue'
-import Referee from '@/components/referee/Referee.vue'
-import Downlamp from '@/components/referee/Downlamp.vue'
-import LiftingOrderTest from '@/components/Lifting/LiftingOrderTest.vue'
+  const Router = createRouter({
+    scrollBehavior: () => ({ left: 0, top: 0 }),
+    routes,
 
-import About from '@/components/About.vue'
-import store from "../store";
+    // Leave this as is and make changes in quasar.conf.js instead!
+    // quasar.conf.js -> build -> vueRouterMode
+    // quasar.conf.js -> build -> publicPath
+    history: createHistory(process.env.VUE_ROUTER_BASE),
+  });
 
-
-
-Vue.use(VueRouter)
-
-export default new VueRouter({
-  //mode: 'history',
-  base: '/',//process.env.NODE_ENV === 'development' ? '/' : '/live/',
-  routes: [
-    {
-      name: 'competition',
-      path: '/competition/:competitionid',
-      props: true,
-      component: Competition,
-      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
-    },
-    {
-      name: 'home',
-      path: '/',
-      component: Root
-    },
-    {
-      name: 'overlays',
-      path: '/overlays/:competitionid',
-      props: true,
-      component: Overlay
-    },
-    {
-      name: 'Scoreboard',
-      path: '/competition/:competitionid/scoreboard/:type',
-      props: true,
-      meta: { layout: "overlay" },
-      component: ScoreboardTable,
-      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
-    },
-    {
-      name: 'Scoretower',
-      path: '/competition/:competitionid/scoreboardtower/:type',
-      props: true,
-      meta: { layout: "overlay" },
-      component: ScoreboardTower,
-      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
-    },
-    {
-      name: 'current',
-      path: '/competition/:competitionid/current/',
-      meta: { layout: "overlay" },
-      props: true,
-      component: Current,
-      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
-    },
-    {
-      name: 'teamstandings',
-      path: '/competition/:competitionid/team/',
-      meta: { layout: "overlay" },
-      props: true,
-      component: TeamStandings,
-      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
-    },
-    {
-      name: 'teamstandingsbeamer',
-      path: '/competition/:competitionid/:type/beamer',
-      meta: { layout: "overlay" },
-      props: true,
-      component: TeamStandingsBeamer,
-      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
-    },
-    {
-      name: 'weight',
-      path: '/competition/:competitionid/weight/',
-      props: true,
-      component: Weight,
-      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
-    },
-    {
-      name: 'timer',
-      path: '/competition/:competitionid/timer/',
-      props: true,
-      component: Countdown,
-      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
-    },
-    {
-      name: 'timercontroller',
-      path: '/competition/:competitionid/timer/controller/',
-      props: true,
-      component: CountdownController,
-      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
-    },
-    {
-      name: 'referee',
-      path: '/competition/:competitionid/referee/',
-      props: true,
-      component: Referee,
-      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
-    },
-    {
-      name: 'downlamp',
-      path: '/competition/:competitionid/downlamp/',
-      props: true,
-      component: Downlamp,
-      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
-    },
-    {
-      name: 'refereeController',
-      path: '/competition/:competitionid/referee/:referee/controller/',
-      props: true,
-      component: RefereeController,
-      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
-    },
-    {
-      name: 'admin',
-      path: '/admin',
-      component: Admin
-    },
-    {
-      name: 'about',
-      path: '/about',
-      component: About
-    },
-    {
-      name: 'LiftingOrderTest',
-      path: '/lifting/:competitionid/',
-      props: true,
-      component: LiftingOrderTest,
-      beforeEnter (to, from, next) { store.commit('setCompetitionId', to.params.competitionid); next(); },
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: Login
-  }
-  ]
-})
-
+  return Router;
+});
