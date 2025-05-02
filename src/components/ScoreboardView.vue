@@ -190,10 +190,10 @@
         <!-- Header Row -->
         <div class="row row2 text-subtitle1 text-bold text-white">
           <div class="col">Name</div>
-          <div class="col-1 text-center">Verein</div>
+          <div class="col-2 text-center">Verein</div>
           <div class="col-3 text-center">Reißen</div>
           <div class="col-3 text-center">Stoßen</div>
-          <div class="col-2 text-center">Zweikampf</div>
+          <div class="col-1 text-center">Zweikampf</div>
         </div>
 
         <!-- Data Rows -->
@@ -203,8 +203,8 @@
           class="row row2 text-h5 text-bold text-white"
         >
           <div class="col">{{ row.name }}</div>
-          <div class="col-1 text-center">
-            {{ row.masterdata.club_single_short }}
+          <div class="col-2 text-center">
+            {{ row.masterdata.club_single }}
           </div>
 
           <!-- Reißen Attempts -->
@@ -250,17 +250,12 @@
             </div>
           </div>
           <!-- Zweikampf -->
-          <div class="col-2">
+          <div class="col-1">
             <div class="row q-col-gutter-xs">
               <div class="col"></div>
               <div class="col-4 text-center attempt-cell">
                 <div :class="getAttemptClass(-1)" class="attempt-highlight">
                   {{ row.max_cj + row.max_snatch }}
-                </div>
-              </div>
-              <div class="col-4 text-center attempt-cell">
-                <div :class="getAttemptClass(-1)" class="attempt-highlight">
-                  {{ round(row.total_points) }}
                 </div>
               </div>
               <div class="col"></div>

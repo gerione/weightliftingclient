@@ -18,12 +18,12 @@
 <script setup lang="ts">
 defineOptions({
   name: 'IndexPage',
-});
+})
 const props = defineProps<{
-  competitionid: number;
-}>();
+  competitionid: number
+}>()
 
 function createLink(id: number, where_to: string): string {
-  return String(id) + where_to;
+  return String(id) + where_to
 }
 </script>
