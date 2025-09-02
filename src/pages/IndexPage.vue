@@ -24,13 +24,13 @@
 <script setup lang="ts">
 defineOptions({
   name: 'IndexPage',
-});
+})
 
-import { onMounted } from 'vue';
-import { useCompetitionsStore } from '../stores/competitions';
-import type { QTableProps } from 'quasar';
+import { onMounted } from 'vue'
+import { useCompetitionsStore } from '../stores/competitions'
+import type { QTableProps } from 'quasar'
 
-const competitionsStore = useCompetitionsStore();
+const competitionsStore = useCompetitionsStore()
 
 const columns: QTableProps['columns'] = [
   {
@@ -57,17 +57,17 @@ const columns: QTableProps['columns'] = [
     sortable: true,
   },
   { name: 'actions', label: 'Action', field: '' },
-];
+]
 function createLink(id: number): string {
-  return '/competition/' + String(id);
+  return '/competition/' + String(id)
 }
 function createOverlayLink(id: number): string {
-  return '/overlays/' + String(id);
+  return '/overlays/' + String(id)
 }
 onMounted(async () => {
-  const { success, status } = await competitionsStore.dispatchGetCompetitions();
+  const { success, status } = await competitionsStore.dispatchGetCompetitions()
   if (!success) {
-    console.log('Api status ->', status);
+    console.log('Api status ->', status)
   }
-});
+})
 </script>
