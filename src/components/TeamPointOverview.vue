@@ -6,7 +6,7 @@
 
       <!-- Header Row -->
       <div class="row row2 text-subtitle1 text-bold text-white">
-        <div class="col"></div>
+        <div class="col-1"></div>
 
         <div
           v-for="[team, lifters_team] in splitLiftersByTeam"
@@ -24,11 +24,11 @@
       <div class="row justify-center items-center text-white text-bold text-h2" />
 
       <!-- Current Rows -->
-      <div class="row row2 justify-center items-center bg-grey-8 text-white text-bold text-h5">
+      <div class="row row2 justify-center items-center bg-grey-8 text-white text-bold text-h3">
         <div class="col text-center text-weight-bold">Aktueller Stand</div>
       </div>
       <div class="row row2 justify-center items-center text-white text-bold text-h2">
-        <div class="col text-center text-weight-bold">R</div>
+        <div class="col-1 text-center text-weight-bold">R</div>
 
         <div
           v-for="[team, lifters_team] in splitLiftersByTeam"
@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="row row2 justify-center items-center text-white text-bold text-h2">
-        <div class="col text-center text-weight-bold">S</div>
+        <div class="col-1 text-center text-weight-bold">S</div>
 
         <div
           v-for="[team, lifters_team] in splitLiftersByTeam"
@@ -60,7 +60,7 @@
         </div>
       </div>
       <div class="row row2 justify-center items-center text-white text-bold text-h2">
-        <div class="col text-center text-weight-bold">ZWK</div>
+        <div class="col-1 text-center text-weight-bold">ZWK</div>
         <div
           v-for="[team, lifters_team] in splitLiftersByTeam"
           :key="'team-' + team"
@@ -79,11 +79,11 @@
       <div class="row justify-center items-center text-white text-bold text-h2" />
 
       <!-- Forecast Rows -->
-      <div class="row row2 justify-center items-center text-white text-bold text-h5 bg-grey-8">
+      <div class="row row2 justify-center items-center text-white text-bold text-h3 bg-grey-8">
         <div class="col text-center text-weight-bold">Hochrechnung</div>
       </div>
       <div class="row row2 justify-center items-center text-white text-bold text-h2">
-        <div class="col text-center text-weight-bold">R</div>
+        <div class="col-1 text-center text-weight-bold">R</div>
 
         <div
           v-for="[team, lifters_team] in splitLiftersByTeam"
@@ -99,7 +99,7 @@
         </div>
       </div>
       <div class="row row2 justify-center items-center text-white text-bold text-h2">
-        <div class="col text-center text-weight-bold">S</div>
+        <div class="col-1 text-center text-weight-bold">S</div>
 
         <div
           v-for="[team, lifters_team] in splitLiftersByTeam"
@@ -115,7 +115,7 @@
         </div>
       </div>
       <div class="row row2 justify-center items-center text-white text-bold text-h2">
-        <div class="col text-center text-weight-bold">ZWK</div>
+        <div class="col-1 text-center text-weight-bold">ZWK</div>
         <div
           v-for="[team, lifters_team] in splitLiftersByTeam"
           :key="'team-' + team"
